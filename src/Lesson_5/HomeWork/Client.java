@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Client {
 
     Card card;
-    ArrayList<Card> allCards = new ArrayList();
+    ArrayList<Card> allCards = new ArrayList<Card>();
 
     //взаимодействие с устройством/местом обслуживания
     void doInteraction(Terminal servicePlace) {

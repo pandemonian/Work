@@ -20,7 +20,6 @@ public class CashMachine implements Terminal {
         if ((amount % 100) != 0) // ошибка
         if (currentCard.getMoneyBalance() < amount)  // throw ошибка
         currentCard.setMoneyBalance(currentCard.getMoneyBalance() - amount);
-
     }
 
     @Override
@@ -28,5 +27,25 @@ public class CashMachine implements Terminal {
         if ((amount % 100) != 0) // ошибка
         if (amount > 50000)  // нельзя сразу много
         currentCard.setMoneyBalance(currentCard.getMoneyBalance() + amount);
+    }
+
+    @Override
+    public void createClient() {
+
+    }
+
+    @Override
+    public void deleteClient() {
+
+    }
+
+    @Override
+    public void createClientCard() {
+
+    }
+
+    @Override
+    public void deleteClientCard() {
+
     }
 }

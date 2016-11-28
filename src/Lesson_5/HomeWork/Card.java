@@ -8,10 +8,10 @@ public class Card {
     private String number;
     private String holder;
     private String valid;
-    private String pin;
+    private int pin;
 
 
-    public Card(String number, String holder, String valid, String pin) {
+    public Card(String number, String holder, String valid, int pin) {
         this.number = number;
         this.holder = holder;
         this.valid = valid;

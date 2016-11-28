@@ -1,5 +1,7 @@
 package Lesson_5.HomeWork;
 
+import Lesson_5.HomeWork.Exceptions.WrongPinException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +19,7 @@ public class Run {
             return br.readLine();
         } catch (IOException e) {
             System.out.println("Ошибка ввода/вывода!");
+            return "";
         }
     }
 
@@ -24,21 +27,26 @@ public class Run {
         inputDgt = Double.parseDouble(input);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
+
+
         Client client = new Client();
-        Card clientCard = new Card("1598865432784500", "Ivan Ivanov", "10/19", "5502");
+        Card clientCard = new Card("1598865432784500", "Ivan Ivanov", "10/19", 5502);
         CashMachine cashMachine = new CashMachine();
 
+        System.out.println("Вставьте карту:");
+
+        //выбор карточки
         //вставляем карту в банкомат
         cashMachine.feedCard(clientCard);
 
 
 
-        System.out.println("Вставьте карту:");
-
-        //выбор карточки, получить currentCard
 
         System.out.println("Введите PIN код:");
+
+        if (!(inputStr = getInputStr()).equals("5502")) throw new WrongPinException("Неправильный PIN-код ", 5502);
 
         //проверка пин-кода(3 раза неверно - блокировка)
 
