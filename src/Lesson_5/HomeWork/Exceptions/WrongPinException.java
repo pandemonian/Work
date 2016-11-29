@@ -6,7 +6,7 @@ package Lesson_5.HomeWork.Exceptions;
 public class WrongPinException extends Exception {
 
     private int pin;
-    public WrongPinException(String message, int pin) {
+    public WrongPinException(String message) {
         super(message);
         this.pin = pin;
     }

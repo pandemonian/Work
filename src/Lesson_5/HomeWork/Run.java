@@ -23,11 +23,19 @@ public class Run {
         }
     }
 
-    static void toDigit(String input) {
-        inputDgt = Double.parseDouble(input);
+    static int getInputDgt() {
+        while (true) {
+            try {
+                return Integer.parseInt(br.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Введено не число!");
+            } catch (IOException e) {
+                System.out.println("Ошибка ввода/вывода!");
+            }
+        }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception  {
 
 
 
@@ -41,12 +49,26 @@ public class Run {
         //вставляем карту в банкомат
         cashMachine.feedCard(clientCard);
 
-
-
-
+        // всё что ниже вывести в один метод ввода пина
         System.out.println("Введите PIN код:");
 
-        if (!(inputStr = getInputStr()).equals("5502")) throw new WrongPinException("Неправильный PIN-код ", 5502);
+        if (!cashMachine.isPinCorrect(getInputDgt())) {
+            if (cashMachine.getWrongCountEnteredPin() != 3) {
+                cashMachine.incrementWrongCountEnteredPin();
+                throw new WrongPinException("Вы " + cashMachine.getWrongCountEnteredPin()
+                        + "-й раз ввели неправильный PIN-код");
+            }
+            if (cashMachine.getWrongCountEnteredPin() == 3) {
+                System.out.println("Блокировка на 3 секунды!!!");
+
+            }
+        }
+
+
+
+
+
+        /*if (!(inputStr = getInputStr()).equals("5502")) throw new WrongPinException("Неправильный PIN-код ", 5502);
 
         //проверка пин-кода(3 раза неверно - блокировка)
 
@@ -76,7 +98,7 @@ public class Run {
         if ((inputStr = getInputStr()).equals("5"));
         if ((inputStr = getInputStr()).equals("6"));
         if ((inputStr = getInputStr()).equals("7"));
-        if ((inputStr = getInputStr()).equals("8"))  return;
+        if ((inputStr = getInputStr()).equals("8"))  return;*/
 
 
     }

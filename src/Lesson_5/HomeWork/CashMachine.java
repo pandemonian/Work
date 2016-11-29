@@ -6,6 +6,7 @@ package Lesson_5.HomeWork;
 public class CashMachine implements Terminal {
 
     private Card currentCard;
+    private int wrongCountEnteredPin;
 
     void feedCard(Card card) {
         currentCard = card;
@@ -15,11 +16,37 @@ public class CashMachine implements Terminal {
         return currentCard.getMoneyBalance();
     }
 
-    @Override
+    public boolean isPinCorrect(int pin) {
+        if (currentCard.isPinEqualsInputPin(pin))  return true;
+        else {
+            wrongCountEnteredPin++;
+            return false;
+        }
+    }
+
+    public boolean isCardBlocked() {
+        return wrongCountEnteredPin >= 3;
+    }
+
+    public int getWrongCountEnteredPin() {
+        return wrongCountEnteredPin;
+    }
+
+    public void incrementWrongCountEnteredPin() {
+        wrongCountEnteredPin++;
+    }
+
+    /*@Override
     public void getCash(double amount) {
+        currentCard.isPinEqualsInputPin();
         if ((amount % 100) != 0) // ошибка
         if (currentCard.getMoneyBalance() < amount)  // throw ошибка
         currentCard.setMoneyBalance(currentCard.getMoneyBalance() - amount);
+    }*/
+
+    @Override
+    public void getCash(double amount) {
+
     }
 
     @Override
