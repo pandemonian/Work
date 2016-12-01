@@ -1,5 +1,7 @@
 package Lesson_5.HomeWork;
 
+import Lesson_5.HomeWork.Exceptions.WrongPinException;
+
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
@@ -14,6 +16,25 @@ public class CashMachine implements Terminal {
 
     public double checkMoneyBalance() {
         return currentCard.getMoneyBalance();
+        
+    }
+
+    public void inputPin(int Pin) throws WrongPinException {
+
+        while (true) {
+
+            if (this.isPinCorrect(Pin)) break;
+            else {
+                if (this.getWrongCountEnteredPin() != 3) {
+
+                    throw new WrongPinException(this);
+
+                }
+                if (this.getWrongCountEnteredPin() == 3) {
+                    System.out.println("Блокировка на 3 секунды!!!");
+                }
+            }
+        }
     }
 
     public boolean isPinCorrect(int pin) {

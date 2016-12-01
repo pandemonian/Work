@@ -52,17 +52,8 @@ public class Run {
         // всё что ниже вывести в один метод ввода пина
         System.out.println("Введите PIN код:");
 
-        if (!cashMachine.isPinCorrect(getInputDgt())) {
-            if (cashMachine.getWrongCountEnteredPin() != 3) {
-                cashMachine.incrementWrongCountEnteredPin();
-                throw new WrongPinException("Вы " + cashMachine.getWrongCountEnteredPin()
-                        + "-й раз ввели неправильный PIN-код");
-            }
-            if (cashMachine.getWrongCountEnteredPin() == 3) {
-                System.out.println("Блокировка на 3 секунды!!!");
+        cashMachine.inputPin(getInputDgt());
 
-            }
-        }
 
 
 
