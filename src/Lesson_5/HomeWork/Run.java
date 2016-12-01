@@ -54,6 +54,11 @@ public class Run {
         //запрос PIN`a при приветствии
         cashMachine.inputPin(getInputDgt());
 
+        System.out.println(cashMachine.checkMoneyBalance());
+
+        cashMachine.putCash(500);
+
+        System.out.println(cashMachine.checkMoneyBalance());
 
 
 

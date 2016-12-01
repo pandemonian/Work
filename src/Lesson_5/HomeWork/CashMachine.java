@@ -1,5 +1,6 @@
 package Lesson_5.HomeWork;
 
+import Lesson_5.HomeWork.Exceptions.MoneyRatioException;
 import Lesson_5.HomeWork.Exceptions.WrongPinException;
 
 /**
@@ -17,9 +18,7 @@ public class CashMachine implements Terminal {
     void inputPin(int Pin)  {
         while (true) {
             if (!isPinCorrect(Pin)) {
-
                 wrongCountEnteredPin++;
-
                 try {
                     throw new WrongPinException();
                 } catch (WrongPinException e) {
@@ -41,14 +40,16 @@ public class CashMachine implements Terminal {
                     Pin = Run.getInputDgt();
                     if (isPinCorrect(Pin)) break;
                 }
-            }
+            } else break;
         }
     }
 
+    //finish
     private boolean isPinCorrect(int pin) {
         return currentCard.isPinCorrect(pin);
     }
 
+    //finish
     public double checkMoneyBalance() {
         return currentCard.getMoneyBalance();
     }
@@ -57,6 +58,7 @@ public class CashMachine implements Terminal {
         return wrongCountEnteredPin == 3;
     }
 
+    //finish
     private int getWrongCountEnteredPin() {
         return wrongCountEnteredPin;
     }
@@ -75,12 +77,34 @@ public class CashMachine implements Terminal {
 
     }
 
+    //finish
     @Override
     public void putCash(double amount) {
-        if ((amount % 100) != 0) // ошибка
-        if (amount > 50000)  // нельзя сразу много
-        currentCard.setMoneyBalance(currentCard.getMoneyBalance() + amount);
+
+        while (true) {
+            System.out.println("Укажите сумму к зачислению");
+
+            if (((amount = Run.getInputDgt()) % 100) != 0) {
+                try {
+                    throw new MoneyRatioException();
+                } catch (MoneyRatioException e) {
+                    System.out.println("Сумма не кратна 100");
+                    continue;
+                }
+            }
+            if (amount > 50000) {
+                    try {
+                        throw new MoneyRatioException();
+                    } catch (MoneyRatioException e) {
+                        System.out.println("Нельзя положить более 40000 рублей за раз");
+                    }
+            } else {
+                currentCard.setMoneyBalance(currentCard.getMoneyBalance() + amount);
+                break;
+            }
+        }
     }
+
 
     @Override
     public void createClient() {
