@@ -5,7 +5,7 @@ package Lesson_6.ClassWork;
  */
 public class Animal {
 
-    void feed() {
+    void call() {
         System.out.println("Животное накормлено.");
     }
 }

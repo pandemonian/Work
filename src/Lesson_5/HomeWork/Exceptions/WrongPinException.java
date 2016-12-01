@@ -7,7 +7,7 @@ import Lesson_5.HomeWork.CashMachine;
  */
 public class WrongPinException extends Exception {
 
-    public WrongPinException(CashMachine obj) {
+    /*public WrongPinException(CashMachine obj) {
         System.out.println("Вы " + obj.getWrongCountEnteredPin()
                 + "-й раз ввели неправильный PIN-код");
 
@@ -21,5 +21,5 @@ public class WrongPinException extends Exception {
     public WrongPinException(String message) {
         super(message);
 
-    }
+    }*/
 }

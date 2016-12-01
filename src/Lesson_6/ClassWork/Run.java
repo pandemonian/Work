@@ -11,6 +11,7 @@ public class Run {
 
     static List<Pet> list1 = new ArrayList();
     static List<Pet> list2 = new LinkedList();
+    static List<Animal> list3 = new LinkedList();
 
     static {
         list1.add(new Dog());
@@ -18,11 +19,15 @@ public class Run {
 
         list2.add(new Dog());
         list2.add(new Cat());
+
+        list3.add(new Cat());
+        list3.add(new Dog());
+        list3.add(new Animal());
     }
 
-    static <T> void genericPrint(List<T> list) {
+    static <T extends Animal> void genericPrint(List<T> list) {
         for (T it: list) {
-            System.out.println(it);  //тут переменная-итератор не видит метод call()
+            it.call();
         }
     }
 
@@ -35,8 +40,9 @@ public class Run {
 
     public static void main(String[] args) {
 
+        genericPrint(list1);
         genericPrint(list2);
-        genericPrint(list2);
+        genericPrint(list3);
 
         System.out.println("-----------");
 

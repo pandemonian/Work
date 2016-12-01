@@ -38,7 +38,7 @@ public class Card {
         return valid;
     }
 
-    public boolean isPinEqualsInputPin(int inputPin) {
+    public boolean isPinCorrect(int inputPin) {
         return inputPin == pin;
     }
 }

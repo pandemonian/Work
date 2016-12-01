@@ -37,8 +37,6 @@ public class Run {
 
     public static void main(String[] args) throws Exception  {
 
-
-
         Client client = new Client();
         Card clientCard = new Card("1598865432784500", "Ivan Ivanov", "10/19", 5502);
         CashMachine cashMachine = new CashMachine();
@@ -46,13 +44,17 @@ public class Run {
         System.out.println("Вставьте карту:");
 
         //выбор карточки
+
         //вставляем карту в банкомат
         cashMachine.feedCard(clientCard);
 
         // всё что ниже вывести в один метод ввода пина
         System.out.println("Введите PIN код:");
 
+        //запрос PIN`a при приветствии
         cashMachine.inputPin(getInputDgt());
+
+
 
 
 

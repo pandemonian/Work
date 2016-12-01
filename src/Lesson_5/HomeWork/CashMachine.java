@@ -14,52 +14,57 @@ public class CashMachine implements Terminal {
         currentCard = card;
     }
 
-    public double checkMoneyBalance() {
-        return currentCard.getMoneyBalance();
-        
-    }
-
-    public void inputPin(int Pin) throws WrongPinException {
-
+    void inputPin(int Pin)  {
         while (true) {
+            if (!isPinCorrect(Pin)) {
 
-            if (this.isPinCorrect(Pin)) break;
-            else {
-                if (this.getWrongCountEnteredPin() != 3) {
+                wrongCountEnteredPin++;
 
-                    throw new WrongPinException(this);
+                try {
+                    throw new WrongPinException();
+                } catch (WrongPinException e) {
 
-                }
-                if (this.getWrongCountEnteredPin() == 3) {
-                    System.out.println("Блокировка на 3 секунды!!!");
+                    if (wrongCountEnteredPin == 3) {
+                        System.out.println("Вы 3 раза не правильно ввели PIN-код, ваша карта блокируется" +
+                                " на 3 секунды!");
+                        //блокировка
+                        wrongCountEnteredPin = 0;
+                    }
+
+                    if (wrongCountEnteredPin > 0) {
+                        System.out.println("Вы " + getWrongCountEnteredPin()
+                                + "-й раз ввели неправильный PIN-код");
+                    }
+
+                    System.out.println("Введите PIN-код ещё раз");
+
+                    Pin = Run.getInputDgt();
+                    if (isPinCorrect(Pin)) break;
                 }
             }
         }
     }
 
-    public boolean isPinCorrect(int pin) {
-        if (currentCard.isPinEqualsInputPin(pin))  return true;
-        else {
-            wrongCountEnteredPin++;
-            return false;
-        }
+    private boolean isPinCorrect(int pin) {
+        return currentCard.isPinCorrect(pin);
+    }
+
+    public double checkMoneyBalance() {
+        return currentCard.getMoneyBalance();
     }
 
     public boolean isCardBlocked() {
-        return wrongCountEnteredPin >= 3;
+        return wrongCountEnteredPin == 3;
     }
 
-    public int getWrongCountEnteredPin() {
+    private int getWrongCountEnteredPin() {
         return wrongCountEnteredPin;
     }
 
-    public void incrementWrongCountEnteredPin() {
-        wrongCountEnteredPin++;
-    }
 
     /*@Override
     public void getCash(double amount) {
-        currentCard.isPinEqualsInputPin();
+        currentCard.isPinCorrect();
         if ((amount % 100) != 0) // ошибка
         if (currentCard.getMoneyBalance() < amount)  // throw ошибка
         currentCard.setMoneyBalance(currentCard.getMoneyBalance() - amount);
