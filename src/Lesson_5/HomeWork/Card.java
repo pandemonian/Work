@@ -11,18 +11,18 @@ public class Card {
     private int pin;
 
 
-    public Card(String number, String holder, String valid, int pin) {
+    Card(String number, String holder, String valid, int pin) {
         this.number = number;
         this.holder = holder;
         this.valid = valid;
         this.pin = pin;
     }
 
-    public int getMoneyBalance() {
+    int getMoneyBalance() {
         return moneyBalance;
     }
 
-    public void setMoneyBalance(int moneyBalance) {
+    void setMoneyBalance(int moneyBalance) {
         this.moneyBalance = moneyBalance;
     }
 
@@ -38,7 +38,7 @@ public class Card {
         return valid;
     }
 
-    public boolean isPinCorrect(int inputPin) {
+    boolean isPinCorrect(int inputPin) {
         return inputPin == pin;
     }
 }

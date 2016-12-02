@@ -37,7 +37,7 @@ public class Run {
 
     public static void main(String[] args) throws Exception  {
 
-        Client client = new Client();
+        Client client1 = new Client();
         Card clientCard = new Card("1598865432784500", "Ivan Ivanov", "10/19", 5502);
         CashMachine cashMachine = new CashMachine();
 

@@ -10,9 +10,10 @@ import java.util.ArrayList;
  */
 public class CashMachine implements Terminal {
 
+    private Client currentclient;
     private Card currentCard;
     private int wrongCountEnteredPin;
-    ArrayList<Client> databaseClients
+    private ArrayList<Client> databaseClients;
 
     //finish
     void feedCard(Card card) {
