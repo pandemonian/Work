@@ -4,7 +4,7 @@ package Lesson_5.HomeWork;
  * Created by Gubanov Pavel on 28.11.16.
  */
 public class Card {
-    private double moneyBalance;
+    private int moneyBalance;
     private String number;
     private String holder;
     private String valid;
@@ -18,11 +18,11 @@ public class Card {
         this.pin = pin;
     }
 
-    public double getMoneyBalance() {
+    public int getMoneyBalance() {
         return moneyBalance;
     }
 
-    public void setMoneyBalance(double moneyBalance) {
+    public void setMoneyBalance(int moneyBalance) {
         this.moneyBalance = moneyBalance;
     }
 

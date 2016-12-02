@@ -5,9 +5,9 @@ package Lesson_5.HomeWork;
  */
 public interface Terminal {
 
-    double checkMoneyBalance();
-    void getCash(double amount);
-    void putCash(double amount);
+    void checkMoneyBalance();
+    void getCash();
+    void putCash();
     void createClient();
     void deleteClient();
     void createClientCard();

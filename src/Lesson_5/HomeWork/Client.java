@@ -7,7 +7,10 @@ import java.util.ArrayList;
  */
 public class Client {
 
+    String nameFirstLast;
+    String passportId;
     Card card;
+
     ArrayList<Card> allCards = new ArrayList<Card>();
 
     //взаимодействие с устройством/местом обслуживания
