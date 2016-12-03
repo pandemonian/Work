@@ -6,7 +6,7 @@ package Lesson_5.HomeWork.Exceptions;
 public class DuplicateCardException extends CardException {
 
     public void getMsg() {
-        System.out.println("Ошибка! Карта с таким номером уже у клиент существует!");
+        System.out.println("Ошибка! Карта с таким номером уже у клиента существует!");
     }
 
 }

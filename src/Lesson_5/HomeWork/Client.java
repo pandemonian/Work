@@ -11,27 +11,17 @@ public class Client {
 
     private String nameFirstLast;
     private String passportId;
-    ArrayList<Card> clientCards;
+    private ArrayList<Card> clientCards;
 
-    Client(String nameFirstLast, String passportId) {
+    public Client(String nameFirstLast, String passportId) {
         clientCards = new ArrayList<>();
         this.nameFirstLast = nameFirstLast;
         this.passportId = passportId;
     }
 
-    void addCard(Card card) {
-        for (int i = 0; i < clientCards.size(); i++) {
-            if (clientCards.get(i).getNumber().equals(card.getNumber())) {
-                try {
-                    throw new DuplicateCardException();
-                } catch (DuplicateCardException e) {
-                    e.getMsg();
-                }
-            }
-        }
 
-        clientCards.add(card);
-    }
+
+
 
     void removeCard(String number) {
         if (clientCards.size() == 0) {

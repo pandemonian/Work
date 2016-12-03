@@ -1,19 +1,32 @@
 package Lesson_5.HomeWork;
 
+import Lesson_5.HomeWork.Exceptions.DuplicateCardException;
 import Lesson_5.HomeWork.Exceptions.MoneyRatioException;
 import Lesson_5.HomeWork.Exceptions.WrongPinException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
 public class CashMachine implements Terminal {
 
-    private Client currentclient;
+    private Client currentClient;
     private Card currentCard;
     private int wrongCountEnteredPin;
     private ArrayList<Client> databaseClients;
+
+    CashMachine(Client client) {
+        databaseClients = new ArrayList<>();
+        databaseClients.add(client);
+    }
+
+
+    //finish
+    void workWith(Client client) {
+        currentClient = client;
+    }
 
     //finish
     void feedCard(Card card) {
@@ -118,6 +131,29 @@ public class CashMachine implements Terminal {
         }
     }
 
+    //finish
+    void addCard(Card card) {
+        if (isCardExist(card)) {
+            try {
+                throw new DuplicateCardException();
+            } catch (DuplicateCardException e) {
+                e.getMsg();
+            }
+        }
+        currentClient.clientCards.add(card);
+    }
+
+    //finish
+    boolean isCardExist(Card card) {
+        String cardNumber = card.getNumber();
+
+        for (Client eachClient: databaseClients) {
+            for (Card allExistingCards: eachClient.clientCards) {
+                if (allExistingCards.getNumber().equals(cardNumber)) return true;
+            }
+        }
+        return false;
+    }
 
     public boolean isCardBlocked() {
         return wrongCountEnteredPin == 3;

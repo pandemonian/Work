@@ -37,32 +37,27 @@ public class Run {
 
     public static void main(String[] args) throws Exception  {
 
-        Client client1 = new Client();
-        Card clientCard = new Card("1598865432784500", "Ivan Ivanov", "10/19", 5502);
-        CashMachine cashMachine = new CashMachine();
+        Client client1 = new Client("Ivan Ivanov", "1234 456789");
+        Card clientCard1 = new Card("1598865432784500", "Ivan Ivanov", "10/19", 5502);
+        Card clientCard2 = new Card("4578976278476460", "Ivan Ivanov", "09/19", 5881);
+        CashMachine bankomat = new CashMachine(client1);
 
-        System.out.println("Вставьте карту:");
+        bankomat.workWith(client1);
+        bankomat.feedCard(clientCard1);
 
-        //выбор карточки
-
-        //вставляем карту в банкомат
-        cashMachine.feedCard(clientCard);
-
-        // всё что ниже вывести в один метод ввода пина
         System.out.println("Введите PIN код:");
+        bankomat.inputPin(getInputDgt());
 
-        //запрос PIN`a при приветствии
-        cashMachine.inputPin(getInputDgt());
+        //while
+        bankomat.checkMoneyBalance();
 
-        cashMachine.checkMoneyBalance();
+        bankomat.putCash();
 
-        cashMachine.putCash();
+        bankomat.checkMoneyBalance();
 
-        cashMachine.checkMoneyBalance();
+        bankomat.getCash();
 
-        cashMachine.getCash();
-
-        cashMachine.checkMoneyBalance();
+        bankomat.checkMoneyBalance();
 
 
 
