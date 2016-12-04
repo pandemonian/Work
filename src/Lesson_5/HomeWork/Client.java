@@ -19,9 +19,13 @@ public class Client {
         this.passportId = passportId;
     }
 
+    String getPassportId() {
+        return passportId;
+    }
 
-
-
+    ArrayList<Card> getClientCards() {
+        return clientCards;
+    }
 
     void removeCard(String number) {
         if (clientCards.size() == 0) {

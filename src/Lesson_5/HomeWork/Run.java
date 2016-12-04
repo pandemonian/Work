@@ -1,7 +1,5 @@
 package Lesson_5.HomeWork;
 
-import Lesson_5.HomeWork.Exceptions.WrongPinException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +11,7 @@ public class Run {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static String inputStr;
     private static double inputDgt;
+    private static String outFio;
 
     static String getInputStr() {
         try {
@@ -48,27 +47,6 @@ public class Run {
         System.out.println("Введите PIN код:");
         bankomat.inputPin(getInputDgt());
 
-        //while
-        bankomat.checkMoneyBalance();
-
-        bankomat.putCash();
-
-        bankomat.checkMoneyBalance();
-
-        bankomat.getCash();
-
-        bankomat.checkMoneyBalance();
-
-
-
-
-
-
-
-        /*if (!(inputStr = getInputStr()).equals("5502")) throw new WrongPinException("Неправильный PIN-код ", 5502);
-
-        //проверка пин-кода(3 раза неверно - блокировка)
-
         System.out.println("Выберите операцию:");
         System.out.println("1 - Проверить состояние счёта");
         System.out.println("2 - Снять наличные");
@@ -79,23 +57,28 @@ public class Run {
         System.out.println("7 - Удалить карту");
         System.out.println("8 - Выйти");
 
-        if ((inputStr = getInputStr()).equals("1")) {
-            System.out.println("Текущий баланс: " + cashMachine.checkMoneyBalance() + " рублей");
+        while (true) {
+            inputStr = getInputStr();
+
+            if (inputStr.equals("1")) {
+                System.out.println("Баланс по вашей карте составляет: " + bankomat.getMoneyBalance() + " руб.");
+            }
+            if (inputStr.equals("2")) {
+                System.out.println("С вашей карты обналичено " + bankomat.getCash() + " рублей");
+            }
+            if (inputStr.equals("3")) {
+                System.out.println("На вашу карты зачислено " + bankomat.putCash() + " рублей");
+            }
+            /*if (inputStr.equals("4")) {
+                System.out.println("В системе создан новый клиент: " + bankomat.getCash() + " рублей");*/
+            }
+
+
+            if (inputStr.equals("8")) System.exit(0);
+
         }
-        if ((inputStr = getInputStr()).equals("2")) {
-            toDigit(getInputStr());        //переменной присваивается значение double
-            cashMachine.getCash(inputDgt);
-            System.out.println("С вашего счёта снято: " + inputDgt + "рублей");
-            System.out.println("Остаток по счёту: " + cashMachine.checkMoneyBalance() + " рублей");
-        }
-        if ((inputStr = getInputStr()).equals("3")) {
-            
-        }
-        if ((inputStr = getInputStr()).equals("4"));
-        if ((inputStr = getInputStr()).equals("5"));
-        if ((inputStr = getInputStr()).equals("6"));
-        if ((inputStr = getInputStr()).equals("7"));
-        if ((inputStr = getInputStr()).equals("8"))  return;*/
+
+
 
 
     }

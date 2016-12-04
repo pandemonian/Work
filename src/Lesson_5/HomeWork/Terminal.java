@@ -5,10 +5,10 @@ package Lesson_5.HomeWork;
  */
 public interface Terminal {
 
-    void checkMoneyBalance();
-    void getCash();
-    void putCash();
-    void createClient();
+    int getMoneyBalance();
+    int getCash();
+    int putCash();
+    String createClient();
     void deleteClient();
     void createClientCard();
     void deleteClientCard();

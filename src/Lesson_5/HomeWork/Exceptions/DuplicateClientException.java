@@ -5,8 +5,8 @@ package Lesson_5.HomeWork.Exceptions;
  */
 public class DuplicateClientException extends ClientException {
 
-    void getMsg() {
-        System.out.println("Ошибка! Такой клиент уже существует!");
+    public void getMsg() {
+        System.out.println("Ошибка! Такой клиент уже зарегистрирован в системе!");
     }
 
 }

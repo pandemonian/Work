@@ -1,16 +1,21 @@
 package Lesson_5.HomeWork;
 
-import Lesson_5.HomeWork.Exceptions.DuplicateCardException;
-import Lesson_5.HomeWork.Exceptions.MoneyRatioException;
-import Lesson_5.HomeWork.Exceptions.WrongPinException;
+import Lesson_5.HomeWork.Exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
 public class CashMachine implements Terminal {
+    static String regexpPassport = "[0-9]{4}\\s[0-9]{6}";
+    static String regexpFio = "[а-яА-Я]{2,}\\s[а-яА-Я]{2,}\\s[а-яА-Я]{2,}";
+    static String regexpPin = "[0-9]{4}";
+    static String regexpValid = "((01)|(02)|(03)|(04)|(05)|(06)|(07)|(08)|(09)|(10)|(11)|(12))" +
+            "(\\/)((16)|(17)|(18)|(19)|(20))";
 
     private Client currentClient;
     private Card currentCard;
@@ -63,25 +68,34 @@ public class CashMachine implements Terminal {
         }
     }
 
-    //finish
-    private boolean isPinCorrect(int pin) {
+        //вспомогательный метод для inputPin
+        private boolean isPinCorrect(int pin) {
         return currentCard.isPinCorrect(pin);
     }
 
     //finish
-    public void checkMoneyBalance() {
-        System.out.println("Ваш баланс составляет: " + currentCard.getMoneyBalance() + " руб.");
+    public int getMoneyBalance() {
+        return currentCard.getMoneyBalance();
     }
 
     //finish
     @Override
-    public void getCash() {
+    public int getCash() {
         int amount;
 
         while (true) {
-            System.out.println("Укажите сумму для снятия");
+            System.out.println("Укажите сумму для снятия:");
+            amount = Run.getInputDgt();
 
-            if (((amount = Run.getInputDgt()) % 100) != 0) {
+            if (amount > getMoneyBalance()) {
+                try {
+                    throw new LowMoneyBalanceException();
+                } catch (LowMoneyBalanceException e) {
+                    e.getMsg();
+                }
+                continue;
+            }
+            if ((amount % 100) != 0) {
                 try {
                     throw new MoneyRatioException();
                 } catch (MoneyRatioException e) {
@@ -97,19 +111,18 @@ public class CashMachine implements Terminal {
                 }
             } else {
                 currentCard.setMoneyBalance(currentCard.getMoneyBalance() - amount);
-                break;
+                return amount;
             }
         }
     }
 
     //finish
     @Override
-    public void putCash() {
+    public int putCash() {
         int amount;
 
         while (true) {
             System.out.println("Укажите сумму к зачислению");
-
             if (((amount = Run.getInputDgt()) % 100) != 0) {
                 try {
                     throw new MoneyRatioException();
@@ -126,38 +139,34 @@ public class CashMachine implements Terminal {
                 }
             } else {
                 currentCard.setMoneyBalance(currentCard.getMoneyBalance() + amount);
-                break;
+                return amount;
             }
         }
     }
 
     //finish
     void addCard(Card card) {
-        if (isCardExist(card)) {
+        if (isCardAlreadyExist(card)) {
             try {
                 throw new DuplicateCardException();
             } catch (DuplicateCardException e) {
                 e.getMsg();
             }
         }
-        currentClient.clientCards.add(card);
+        currentClient.getClientCards().add(card);
     }
 
-    //finish
-    boolean isCardExist(Card card) {
-        String cardNumber = card.getNumber();
+        //вспомогательный метод для addCard
+        private boolean isCardAlreadyExist(Card card) {
+            String cardNumber = card.getNumber();
 
-        for (Client eachClient: databaseClients) {
-            for (Card allExistingCards: eachClient.clientCards) {
-                if (allExistingCards.getNumber().equals(cardNumber)) return true;
+            for (Client eachClient: databaseClients) {
+                for (Card allExistingCards: eachClient.getClientCards()) {
+                    if (allExistingCards.getNumber().equals(cardNumber)) return true;
+                }
             }
+            return false;
         }
-        return false;
-    }
-
-    public boolean isCardBlocked() {
-        return wrongCountEnteredPin == 3;
-    }
 
     //finish
     private int getWrongCountEnteredPin() {
@@ -165,13 +174,70 @@ public class CashMachine implements Terminal {
     }
 
     @Override
-    public void createClient() {
+    public String createClient() {
+        String fio;
+        String passport;
 
+        System.out.println("Укажите паспортные данные");
 
+        while (true) {
+            passport = Run.getInputStr();
+            if (isMatches(regexpPassport, passport)) {
+                if (isClientAlreadyExist(passport)) {
+                    try {
+                        throw new DuplicateClientException();
+                    } catch (DuplicateClientException e) {
+                        e.getMsg();
+                        continue;
+                    }
+                }
+                break;
+            }
+            System.out.println("Номер(6 цифр) и серия(4 цифры) паспорта указываются раздельно!");
+        }
+
+        System.out.println("Укажите фамилию имя отчество");
+
+        while (true) {
+            fio = Run.getInputStr();
+            if (isMatches(regexpFio, fio)) {
+                fio = fio.trim();
+                fio = fio.toUpperCase();
+                break;
+            }
+            System.out.println("Укажите фамилию имя отчество в правильной форме!");
+        }
+
+        databaseClients.add(new Client(fio, passport));
+        return fio;
     }
+
+        //вспомогательный метод для createClient
+        private boolean isClientAlreadyExist(String passport) {
+            for (Client client: databaseClients) {
+                if (client.getPassportId().equals(passport))  return true;
+            }
+            return false;
+        }
 
     @Override
     public void deleteClient() {
+        String passport;
+        String fio;
+
+        System.out.println("Укажите паспортные данные клиента, которого хотите удалить из системы:");
+
+        passport = Run.getInputStr();
+        Iterator<Client> client = databaseClients.iterator();
+
+        while (client.hasNext()) {
+            if ((fio = client.next().getPassportId()).equals(passport)) {
+                client.remove();
+                System.out.println(fio + " удалён из системы!");
+            }
+        }
+
+
 
     }
 
@@ -183,5 +249,11 @@ public class CashMachine implements Terminal {
     @Override
     public void deleteClientCard() {
 
+    }
+
+    boolean isMatches(String regex, String string) {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(string);
+        return m.matches();
     }
 }
