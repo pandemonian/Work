@@ -1,15 +1,17 @@
 package Lesson_5.HomeWork;
 
+import javax.smartcardio.*;
+
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public interface Terminal {
+interface Terminal {
 
     int getMoneyBalance();
     int getCash();
-    int putCash();
-    String createClient();
+    void putCash();
+    void createClient();
     void deleteClient();
-    void createClientCard();
-    void deleteClientCard();
+    void createCard();
+    void deleteCard();
 }

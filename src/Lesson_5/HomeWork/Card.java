@@ -8,10 +8,10 @@ public class Card {
     private String number;
     private String holder;
     private String valid;
-    private int pin;
+    private String pin;
 
 
-    Card(String number, String holder, String valid, int pin) {
+    Card(String number, String holder, String valid, String pin) {
         this.number = number;
         this.holder = holder;
         this.valid = valid;
@@ -38,7 +38,7 @@ public class Card {
         return valid;
     }
 
-    boolean isPinCorrect(int inputPin) {
-        return inputPin == pin;
+    boolean isPinCorrect(String inputPin) {
+        return inputPin.equals(pin);
     }
 }

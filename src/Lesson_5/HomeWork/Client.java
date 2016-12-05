@@ -23,9 +23,19 @@ public class Client {
         return passportId;
     }
 
+    String getNameFirstLast() {
+        return nameFirstLast;
+    }
+
     ArrayList<Card> getClientCards() {
         return clientCards;
     }
+
+    void addClientCards(Card card) {
+        clientCards.add(card);
+    }
+
+
 
     void removeCard(String number) {
         if (clientCards.size() == 0) {
