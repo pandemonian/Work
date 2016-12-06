@@ -10,12 +10,8 @@ import java.util.regex.Pattern;
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public class CashMachine implements Terminal {
-    static String regexpPassport = "[0-9]{4}\\s[0-9]{6}";
-    static String regexpFio = "[а-яА-Я]{2,}\\s[а-яА-Я]{2,}\\s[а-яА-Я]{2,}";
-    static String regexpPin = "[0-9]{4}";
-    static String regexpValid = "((01)|(02)|(03)|(04)|(05)|(06)|(07)|(08)|(09)|(10)|(11)|(12))" +
-            "(\\/)((16)|(17)|(18)|(19)|(20))";
+public class CashMachine extends Thread implements Terminal {
+    private static String regexpPassport = "[0-9]{4}\\s[0-9]{6}";
 
     private Client currentClient;
     private Card currentCard;
@@ -27,67 +23,35 @@ public class CashMachine implements Terminal {
         databaseClients.add(client);
     }
 
-
-    //finish
     void workWith(Client client) {
         currentClient = client;
     }
 
-    //finish
     void feedCard(Card card) {
         currentCard = card;
     }
 
-    //finish
-    void inputPin(String Pin)  {
-        while (true) {
-            if (!isPinCorrect(Pin)) {
-                wrongCountEnteredPin++;
-                try {
-                    throw new WrongPinException();
-                } catch (WrongPinException e) {
-
-                    if (wrongCountEnteredPin == 3) {
-                        System.out.println("Вы 3 раза не правильно ввели PIN-код, ваша карта блокируется" +
-                                " на 3 секунды!");
-                        //блокировка
-                        wrongCountEnteredPin = 0;
-                    }
-
-                    if (wrongCountEnteredPin > 0) {
-                        System.out.println("Вы " + getWrongCountEnteredPin()
-                                + "-й раз ввели неправильный PIN-код");
-                    }
-
-                    System.out.println("Введите PIN-код ещё раз");
-
-                    Pin = Run.getInputStr();
-                    if (isPinCorrect(Pin)) break;
-                }
-            } else break;
-        }
-    }
-
-    //вспомогательный метод для inputPin
-    private boolean isPinCorrect(String pin) {
-        return currentCard.isPinCorrect(pin);
-    }
-
-    //finish
-    public int getMoneyBalance() {
-        return currentCard.getMoneyBalance();
-    }
-
-    //finish
     @Override
-    public int getCash() {
+    public void getMoneyBalance() {
+        inputPin();
+
+        if (isDatabaseClientsEmpty()) return;
+        System.out.println("Баланс по вашей карте составляет: " + currentCard.getMoneyBalance() + " руб.");
+    }
+
+    @Override
+    public void getCash() {
         int amount;
+
+        inputPin();
+
+        if (isDatabaseClientsEmpty()) return;
 
         while (true) {
             System.out.println("Укажите сумму для снятия:");
             amount = Run.getInputDgt();
 
-            if (amount > getMoneyBalance()) {
+            if (amount > currentCard.getMoneyBalance()) {
                 try {
                     throw new LowMoneyBalanceException();
                 } catch (LowMoneyBalanceException e) {
@@ -111,15 +75,19 @@ public class CashMachine implements Terminal {
                 }
             } else {
                 currentCard.setMoneyBalance(currentCard.getMoneyBalance() - amount);
-                return amount;
+                System.out.println("С вашей карты снято " + amount + " рублей");
+                return;
             }
         }
     }
 
-    //finish
     @Override
     public void putCash() {
         int amount;
+
+        inputPin();
+
+        if (isDatabaseClientsEmpty()) return;
 
         while (true) {
             System.out.println("Укажите сумму к зачислению");
@@ -139,14 +107,19 @@ public class CashMachine implements Terminal {
                 }
             } else {
                 currentCard.setMoneyBalance(currentCard.getMoneyBalance() + amount);
+                System.out.println("На вашу карту зачислено " + amount + " рублей");
+                break;
             }
         }
     }
 
     @Override
     public void createClient() {
+        String regexpFio = "[а-яА-Я]{2,}\\s[а-яА-Я]{2,}\\s[а-яА-Я]{2,}";
         String fio;
         String passport;
+
+        inputPin();
 
         System.out.println("Укажите паспортные данные");
 
@@ -181,38 +154,17 @@ public class CashMachine implements Terminal {
         databaseClients.add(new Client(fio, passport));
     }
 
-    //вспомогательный метод для createClient
-    private boolean isClientAlreadyExist(String passport) {
-        for (Client client: databaseClients) {
-            if (client.getPassportId().equals(passport))  return true;
-        }
-        return false;
-    }
-
     @Override
     public void deleteClient() {
         String passport;
-        String fio;
 
-        if (databaseClients.size() == 0) {
-            try {
-                throw new NonexistentException();
-            } catch (NonexistentException e) {
-                e.getNullDataBaseMsg();
-                return;
-            }
-        }
+        inputPin();
+
+        if (isDatabaseClientsEmpty()) return;
 
         System.out.println("Укажите паспортные данные клиента, которого хотите удалить из системы:");
 
-        while (true) {
-            passport = Run.getInputStr();
-            if (!isMatches(regexpPassport, passport)) {
-                System.out.println("Номер(6 цифр) и серия(4 цифры) паспорта указываются раздельно!");
-                continue;
-            }
-            break;
-        }
+        passport = inputPassportData();
 
         for (int i = 0; i < databaseClients.size(); i++) {
             if (databaseClients.get(i).getPassportId().equals(passport)) {
@@ -225,28 +177,26 @@ public class CashMachine implements Terminal {
         try {
             throw new NonexistentException();
         } catch (NonexistentException e) {
-            e.getNonexistentMsg();
+            e.getNonexistentPassportMsg();
         }
     }
 
-    //finish
+    @Override
     public void createCard() {
+        String regexpValid = "((01)|(02)|(03)|(04)|(05)|(06)|(07)|(08)|(09)|(10)|(11)|(12))" +
+                "(\\/)((16)|(17)|(18)|(19)|(20))";
+        String regexpPin = "[0-9]{4}";
         String passport;
+
+        inputPin();
+
+        if (isDatabaseClientsEmpty()) return;
 
         System.out.println("Укажите паспортные данные клиента, для которого хотите завести карту:");
 
         passport = inputPassportData();
 
-        /*while (true) {
-            passport = Run.getInputStr();
-            if (!isMatches(regexpPassport, passport)) {
-                System.out.println("Номер(6 цифр) и серия(4 цифры) паспорта указываются раздельно!");
-                continue;
-            }
-            break;
-        }*/
-
-        for (Client allClients: databaseClients) {
+        for (Client allClients : databaseClients) {
             if (allClients.getPassportId().equals(passport)) {
 
                 currentClient = allClients;
@@ -257,70 +207,91 @@ public class CashMachine implements Terminal {
 
                 while (true) {
                     number = generatorCardNumber();
-                    if (!isCardNumberExist(number))  break;
+                    if (!isCardNumberExist(number)) break;
+
+                    try {
+                        throw new DuplicateCardException();
+                    } catch (DuplicateCardException e) {
+                        e.getDuplicateCardMsg();
+                    }
                 }
 
                 holder = currentClient.getNameFirstLast();
 
                 while (true) {
+                    System.out.println("Введите срок действия карты в формате \"мм/гг\"");
                     valid = Run.getInputStr();
-                    if (isMatches(regexpValid, valid))  break;
+                    if (isMatches(regexpValid, valid)) break;
                 }
 
                 while (true) {
+                    System.out.println("Введите четырёхзначный пин-код");
                     pin = Run.getInputStr();
-                    if (isMatches(regexpPin, pin))  break;
+                    if (isMatches(regexpPin, pin)) break;
                 }
 
                 currentClient.addClientCards(new Card(number, holder, valid, pin));
+                System.out.println("В системе создана карта с номером: " + number);
+                return;
             }
         }
 
         try {
             throw new NonexistentException();
         } catch (NonexistentException e) {
-            e.getNonexistentMsg();
+            e.getNonexistentPassportMsg();
         }
-
-
-
-
-
-
-
-
-
-
-        /*if (isCardAlreadyExist(card)) {
-            try {
-                throw new DuplicateCardException();
-            } catch (DuplicateCardException e) {
-                e.getMsg();
-            }
-        }
-        currentClient.getClientCards().add(card);*/
-    }
-
-    //вспомогательный метод для createCard
-    private boolean isCardAlreadyExist(Card card) {
-        String cardNumber = card.getNumber();
-
-        for (Client eachClient: databaseClients) {
-            for (Card allExistingCards: eachClient.getClientCards()) {
-                if (allExistingCards.getNumber().equals(cardNumber)) return true;
-            }
-        }
-        return false;
     }
 
     @Override
     public void deleteCard() {
+        String passport;
+        String cardNumber;
 
+        inputPin();
+
+        if (isDatabaseClientsEmpty()) return;
+
+        System.out.println("Укажите паспортные данные клиента, для которого хотите завести карту:");
+
+        passport = inputPassportData();
+        cardNumber = inputCardNumberData();
+
+        //ищем клиента по указанным паспортным данным
+        for (Client allClients : databaseClients) {
+            if (allClients.getPassportId().equals(passport)) {
+
+                //ищем карту с указанным номером и если она сущ-ет удаляем её
+                for (int i = 0; i < allClients.getClientCards().size(); i++) {
+                    if (allClients.getClientCards().get(i).getNumber().equals(cardNumber)) {
+                        allClients.getClientCards().remove(i);
+                        System.out.println("Карта с номером: " + cardNumber + " клиента: "
+                                + allClients.getNameFirstLast() + " удалена из системы");
+                        return;
+                    }
+                }
+                try {
+                    throw new NonexistentCardNumberException();
+                } catch (NonexistentCardNumberException e) {
+                    e.getNonexistentCardNumberMsg();
+                }
+            }
+
+            try {
+                throw new NonexistentException();
+            } catch (NonexistentException e) {
+                e.getNonexistentPassportMsg();
+            }
+        }
     }
 
-    //finish
-    private int getWrongCountEnteredPin() {
-        return wrongCountEnteredPin;
+    @Override
+    public void helpInfo() {
+        inputPin();
+        if (isDatabaseClientsEmpty()) return;
+        System.out.println("Текущий пользователь: " + currentClient.getNameFirstLast());
+        System.out.println("Номер карты: " + currentCard.getNumber());
+        System.out.println("Баланс: " + currentCard.getMoneyBalance());
     }
 
     private boolean isMatches(String regex, String string) {
@@ -329,7 +300,43 @@ public class CashMachine implements Terminal {
         return m.matches();
     }
 
-    String generatorCardNumber() {
+    private boolean isDatabaseClientsEmpty() {
+        if (databaseClients.size() == 0) {
+            try {
+                throw new NonexistentException();
+            } catch (NonexistentException e) {
+                e.getNullDataBaseMsg();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //вспомогательный метод для createClient
+    private boolean isClientAlreadyExist(String passport) {
+        for (Client client : databaseClients) {
+            if (client.getPassportId().equals(passport)) return true;
+        }
+        return false;
+    }
+
+    //вспомогательный метод для createCard
+    private boolean isCardNumberExist(String number) {
+        for (Client client : databaseClients) {
+            for (Card clientCard : client.getClientCards()) {
+                if (clientCard.getNumber().equals(number)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private int getWrongCountEnteredPin() {
+        return wrongCountEnteredPin;
+    }
+
+    private String generatorCardNumber() {
         Random random = new Random();
         String number = "";
         for (int i = 0; i < 16; i++) {
@@ -338,39 +345,98 @@ public class CashMachine implements Terminal {
         return number;
     }
 
-    boolean isCardNumberExist(String number) {
-        for (Client allClients: databaseClients) {
-            for (Card kitClientCards: allClients.getClientCards()) {
-                if (kitClientCards.getNumber().equals(number))  return true;
-            }
-        }
-        return false;
-    }
-
     private String inputPassportData() {
         String passport;
         while (true) {
             passport = Run.getInputStr();
             if (!isMatches(regexpPassport, passport)) {
-                System.out.println("Номер(6 цифр) и серия(4 цифры) паспорта указываются раздельно!");
+                System.out.println("Серия(4 цифры) и номер(6 цифр) паспорта указываются раздельно!");
                 continue;
             }
             return passport;
         }
     }
 
-    //testing
-    boolean searchClientViaPassport(String passport, Client client) {
-        for (Client allClients: databaseClients) {
-            if (allClients.getPassportId().equals(passport)) {
-                client = allClients;
-                return true;
+    private String inputCardNumberData() {
+        String regexpCardNumber = "[0-9]{16}";
+        String cardNumber;
+        while (true) {
+            cardNumber = Run.getInputStr();
+            cardNumber = cardNumber.replace(" ", "");
+            if (!isMatches(regexpCardNumber, cardNumber)) {
+                System.out.println("Укажите 16-значный номер карты!");
+                continue;
             }
+            return cardNumber;
         }
-        return false;
     }
 
+    void inputPin() {
+        System.out.println("Введите PIN код:");
+        String Pin = Run.getInputStr();
 
+        while (true) {
+            if (!isPinCorrect(Pin)) {
+                wrongCountEnteredPin++;
+                try {
+                    throw new WrongPinException();
+                } catch (WrongPinException e) {
 
+                    if (wrongCountEnteredPin == 3) {
+                        System.out.println("Вы 3 раза не правильно ввели PIN-код, ваша карта блокируется");
 
+                        this.start();
+                        //блокировка
+                        wrongCountEnteredPin = 0;
+                    }
+
+                    if (wrongCountEnteredPin > 0) {
+                        System.out.println("Вы " + getWrongCountEnteredPin()
+                                + "-й раз ввели неправильный PIN-код");
+                    }
+
+                    System.out.println("Введите PIN-код ещё раз");
+
+                    Pin = Run.getInputStr();
+                    if (isPinCorrect(Pin)) break;
+                }
+            } else break;
+        }
+    }
+
+    private boolean isPinCorrect(String pin) {
+        return currentCard.isPinCorrect(pin);
+    }
+
+    Card chooseCard(String cardNumber) {
+        //String cardNumber = Run.getInputStr();
+        if (isDatabaseClientsEmpty()) return currentCard;
+
+        if (isCardNumberExist(cardNumber)) {
+
+            for (Client client : databaseClients) {
+                for (Card clientCard : client.getClientCards()) {
+                    if (clientCard.getNumber().equals(cardNumber)) {
+                        return clientCard;
+                    }
+
+                }
+            }
+        }
+        return currentCard;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 3; i > 0; i--) {
+            System.out.println("Карта разблокируется через " + i);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Карта разблокирована!");
+        System.out.println("Введите PIN-код ещё раз");
+    }
 }

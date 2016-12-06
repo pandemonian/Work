@@ -7,11 +7,12 @@ import javax.smartcardio.*;
  */
 interface Terminal {
 
-    int getMoneyBalance();
-    int getCash();
+    void getMoneyBalance();
+    void getCash();
     void putCash();
     void createClient();
     void deleteClient();
     void createCard();
     void deleteCard();
+    void helpInfo();
 }

@@ -9,7 +9,7 @@ public class NonexistentException extends ClientException {
         System.out.println("В системе нет ни одного клиента!");
     }
 
-    public void getNonexistentMsg() {
+    public void getNonexistentPassportMsg() {
         System.out.println("В системе нет ни одного пользователя с такими паспортными данными!");
     }
 }
