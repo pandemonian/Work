@@ -13,7 +13,13 @@ public class CardException extends Exception {
         System.out.println("Карты с таким номером у клиента не существует!");
     }
 
-    public void getClientHasNoCardMsg(){
-        System.out.println("У клиента нет ни одной банковской карты");
+    public void getClientLastCardMsg(){
+        System.out.println("У клиента единственная банковская карта, чтобы удалить эту - создайте новую!");
     }
+
+    public void getWrongPinMsg(int count) {
+        System.out.println("Вы " + count + "-й раз ввели неправильный PIN-код");
+    }
+
+
 }

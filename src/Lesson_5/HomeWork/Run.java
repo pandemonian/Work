@@ -10,8 +10,6 @@ import java.io.InputStreamReader;
 public class Run {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static String inputStr;
-    private static double inputDgt;
-    private static String outFio;
 
     static String getInputStr() {
         try {
@@ -44,7 +42,7 @@ public class Run {
         bankomat.workWith(client1);
         bankomat.feedCard(clientCard1);
 
-        System.out.println("Добро пожаловать, Вас преветствует ПАО \"Объебанк\"");
+        System.out.println("Добро пожаловать, Вас приветствует ПАО \"Объебанк\"");
         System.out.println("Объединённый Единый Банк");
         System.out.println("");
         bankomat.inputPin();

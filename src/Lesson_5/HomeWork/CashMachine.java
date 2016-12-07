@@ -1,8 +1,8 @@
 package Lesson_5.HomeWork;
 
-import Lesson_5.HomeWork.Exceptions.BlockException;
 import Lesson_5.HomeWork.Exceptions.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public class CashMachine extends Thread implements Terminal {
+class CashMachine extends Thread implements Terminal, Serializable {
     private static String regexpPassport = "[0-9]{4}\\s[0-9]{6}";
 
     private Client currentClient;
@@ -243,7 +243,7 @@ public class CashMachine extends Thread implements Terminal {
         String cardNumber;
 
         inputPin();
-        if (isLastCardAtDataBase())  return;
+        if (isLastCardAtClient())  return;
 
         System.out.println("Укажите паспортные данные клиента, у которого хотите удалить карту:");
         passport = inputPassportData();
@@ -266,6 +266,15 @@ public class CashMachine extends Thread implements Terminal {
                         client.getClientCards().remove(i);
                         System.out.println("Карта с номером: " + cardNumber + ", клиента: "
                                 + client.getNameFirstLast() + ", удалена из системы");
+
+                        //если удаляем текущую карту
+                        if (currentCard.getNumber().equals(cardNumber)) {
+                            for (Card card: currentClient.getClientCards()) {
+                                currentCard = card;
+                                System.out.println("Вы удалили текущую карту, работа продолжится с картой" +
+                                        " из вашего набора с номером " + currentCard.getNumber());
+                            }
+                        }
                         return;
                     }
                 }
@@ -331,31 +340,16 @@ public class CashMachine extends Thread implements Terminal {
         return false;
     }
 
-    private boolean isLastCardAtDataBase() {
-        int count = 0;
-
-        for (Client client : databaseClients) {
-            for (Card clientCard : client.getClientCards()) {
-                count++;
-            }
-        }
-        if (count == 1) {
-            System.out.println("низя");
-            return true;
-        }
-        return false;
-    }
-
     private boolean isLastCardAtClient() {
         if (currentClient.getClientCards().size() == 1) {
             try {
                 throw new CardException();
             } catch (CardException e) {
-                e.getClientHasNoCardMsg();
-                return false;
+                e.getClientLastCardMsg();
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     //вспомогательный метод для createClient
@@ -418,10 +412,15 @@ public class CashMachine extends Thread implements Terminal {
     }
 
     void inputPin() {
-        System.out.println("Введите PIN код:");
-        String Pin = Run.getInputStr();
+        String Pin;
+        System.out.println("Введите PIN-код:");
 
         while (true) {
+
+            if (getWrongCountEnteredPin() != 0)System.out.println("Введите PIN-код");
+
+            Pin = Run.getInputStr();
+
             if (!isPinCorrect(Pin)) {
                 wrongCountEnteredPin++;
                 try {
@@ -434,19 +433,15 @@ public class CashMachine extends Thread implements Terminal {
                             throw new BlockException();
                         } catch (BlockException e2) {
                             e2.getCardBlockedMsg();
-                            this.start();
+                            new CashMachine(databaseClients.get(0)).start();
                             wrongCountEnteredPin = 0;
                         }
                     }
 
                     if (wrongCountEnteredPin > 0) {
-                        System.out.println("Вы " + getWrongCountEnteredPin()
-                                + "-й раз ввели неправильный PIN-код");
+                        e1.getWrongPinMsg(getWrongCountEnteredPin());
                     }
 
-                    System.out.println("Введите PIN-код ещё раз");
-
-                    Pin = Run.getInputStr();
                     if (isPinCorrect(Pin)) break;
                 }
             } else break;
