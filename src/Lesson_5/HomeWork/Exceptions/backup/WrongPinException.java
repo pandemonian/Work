@@ -1,6 +1,4 @@
-package Lesson_5.HomeWork.Exceptions;
-
-import Lesson_5.HomeWork.CashMachine;
+package Lesson_5.HomeWork.Exceptions.backup;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.

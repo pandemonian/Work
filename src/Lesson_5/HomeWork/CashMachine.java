@@ -1,5 +1,6 @@
 package Lesson_5.HomeWork;
 
+import Lesson_5.HomeWork.Exceptions.BlockException;
 import Lesson_5.HomeWork.Exceptions.*;
 
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ public class CashMachine extends Thread implements Terminal {
     public void getMoneyBalance() {
         inputPin();
 
-        if (isDatabaseClientsEmpty()) return;
         System.out.println("Баланс по вашей карте составляет: " + currentCard.getMoneyBalance() + " руб.");
     }
 
@@ -45,32 +45,30 @@ public class CashMachine extends Thread implements Terminal {
 
         inputPin();
 
-        if (isDatabaseClientsEmpty()) return;
-
         while (true) {
             System.out.println("Укажите сумму для снятия:");
             amount = Run.getInputDgt();
 
             if (amount > currentCard.getMoneyBalance()) {
                 try {
-                    throw new LowMoneyBalanceException();
-                } catch (LowMoneyBalanceException e) {
-                    e.getMsg();
+                    throw new MoneyException();
+                } catch (MoneyException e) {
+                    e.getLowMoneyBalanceMsg();
                 }
                 continue;
             }
             if ((amount % 100) != 0) {
                 try {
-                    throw new MoneyRatioException();
-                } catch (MoneyRatioException e) {
+                    throw new MoneyException();
+                } catch (MoneyException e) {
                     System.out.println("Сумма не кратна 100");
                     continue;
                 }
             }
             if (amount > 30000) {
                 try {
-                    throw new MoneyRatioException();
-                } catch (MoneyRatioException e) {
+                    throw new MoneyException();
+                } catch (MoneyException e) {
                     System.out.println("Нельзя снять более 30000 рублей за раз");
                 }
             } else {
@@ -87,22 +85,20 @@ public class CashMachine extends Thread implements Terminal {
 
         inputPin();
 
-        if (isDatabaseClientsEmpty()) return;
-
         while (true) {
             System.out.println("Укажите сумму к зачислению");
             if (((amount = Run.getInputDgt()) % 100) != 0) {
                 try {
-                    throw new MoneyRatioException();
-                } catch (MoneyRatioException e) {
+                    throw new MoneyException();
+                } catch (MoneyException e) {
                     System.out.println("Сумма не кратна 100");
                     continue;
                 }
             }
             if (amount > 50000) {
                 try {
-                    throw new MoneyRatioException();
-                } catch (MoneyRatioException e) {
+                    throw new MoneyException();
+                } catch (MoneyException e) {
                     System.out.println("Нельзя положить более 40000 рублей за раз");
                 }
             } else {
@@ -128,9 +124,9 @@ public class CashMachine extends Thread implements Terminal {
             if (isMatches(regexpPassport, passport)) {
                 if (isClientAlreadyExist(passport)) {
                     try {
-                        throw new DuplicateClientException();
-                    } catch (DuplicateClientException e) {
-                        e.getMsg();
+                        throw new ClientException();
+                    } catch (ClientException e) {
+                        e.getDuplicateClientMsg();
                         continue;
                     }
                 }
@@ -160,7 +156,7 @@ public class CashMachine extends Thread implements Terminal {
 
         inputPin();
 
-        if (isDatabaseClientsEmpty()) return;
+        if (isLastClientAtDatabase()) return;
 
         System.out.println("Укажите паспортные данные клиента, которого хотите удалить из системы:");
 
@@ -175,8 +171,8 @@ public class CashMachine extends Thread implements Terminal {
         }
 
         try {
-            throw new NonexistentException();
-        } catch (NonexistentException e) {
+            throw new ClientException();
+        } catch (ClientException e) {
             e.getNonexistentPassportMsg();
         }
     }
@@ -189,8 +185,6 @@ public class CashMachine extends Thread implements Terminal {
         String passport;
 
         inputPin();
-
-        if (isDatabaseClientsEmpty()) return;
 
         System.out.println("Укажите паспортные данные клиента, для которого хотите завести карту:");
 
@@ -207,11 +201,11 @@ public class CashMachine extends Thread implements Terminal {
 
                 while (true) {
                     number = generatorCardNumber();
-                    if (!isCardNumberExist(number)) break;
+                    if (!isCardAlreadyExist(number)) break;
 
                     try {
-                        throw new DuplicateCardException();
-                    } catch (DuplicateCardException e) {
+                        throw new CardException();
+                    } catch (CardException e) {
                         e.getDuplicateCardMsg();
                     }
                 }
@@ -237,8 +231,8 @@ public class CashMachine extends Thread implements Terminal {
         }
 
         try {
-            throw new NonexistentException();
-        } catch (NonexistentException e) {
+            throw new ClientException();
+        } catch (ClientException e) {
             e.getNonexistentPassportMsg();
         }
     }
@@ -249,37 +243,43 @@ public class CashMachine extends Thread implements Terminal {
         String cardNumber;
 
         inputPin();
+        if (isLastCardAtDataBase())  return;
 
-        if (isDatabaseClientsEmpty()) return;
-
-        System.out.println("Укажите паспортные данные клиента, для которого хотите завести карту:");
-
+        System.out.println("Укажите паспортные данные клиента, у которого хотите удалить карту:");
         passport = inputPassportData();
+
+        System.out.println("Укажите номер карты клиента, которую хотите удалить:");
         cardNumber = inputCardNumberData();
 
         //ищем клиента по указанным паспортным данным
-        for (Client allClients : databaseClients) {
-            if (allClients.getPassportId().equals(passport)) {
+        for (Client client : databaseClients) {
+            if (client.getPassportId().equals(passport)) {
+
+                if (isLastCardAtClient()) {
+                    System.out.println("последняя карта у клиента");
+                    return;
+                }
 
                 //ищем карту с указанным номером и если она сущ-ет удаляем её
-                for (int i = 0; i < allClients.getClientCards().size(); i++) {
-                    if (allClients.getClientCards().get(i).getNumber().equals(cardNumber)) {
-                        allClients.getClientCards().remove(i);
-                        System.out.println("Карта с номером: " + cardNumber + " клиента: "
-                                + allClients.getNameFirstLast() + " удалена из системы");
+                for (int i = 0; i < client.getClientCards().size(); i++) {
+                    if (client.getClientCards().get(i).getNumber().equals(cardNumber)) {
+                        client.getClientCards().remove(i);
+                        System.out.println("Карта с номером: " + cardNumber + ", клиента: "
+                                + client.getNameFirstLast() + ", удалена из системы");
                         return;
                     }
                 }
                 try {
-                    throw new NonexistentCardNumberException();
-                } catch (NonexistentCardNumberException e) {
+                    throw new CardException();
+                } catch (CardException e) {
                     e.getNonexistentCardNumberMsg();
+                    return;
                 }
             }
 
             try {
-                throw new NonexistentException();
-            } catch (NonexistentException e) {
+                throw new ClientException();
+            } catch (ClientException e) {
                 e.getNonexistentPassportMsg();
             }
         }
@@ -288,10 +288,23 @@ public class CashMachine extends Thread implements Terminal {
     @Override
     public void helpInfo() {
         inputPin();
-        if (isDatabaseClientsEmpty()) return;
         System.out.println("Текущий пользователь: " + currentClient.getNameFirstLast());
         System.out.println("Номер карты: " + currentCard.getNumber());
         System.out.println("Баланс: " + currentCard.getMoneyBalance());
+    }
+
+    @Override
+    public void run() {
+        for (int i = 3; i > 0; i--) {
+            System.out.println("Карта разблокируется через " + i);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Карта разблокирована!");
+        System.out.println("Введите PIN-код ещё раз");
     }
 
     private boolean isMatches(String regex, String string) {
@@ -300,16 +313,49 @@ public class CashMachine extends Thread implements Terminal {
         return m.matches();
     }
 
-    private boolean isDatabaseClientsEmpty() {
-        if (databaseClients.size() == 0) {
+    private boolean isLastClientAtDatabase() {
+        int count = 0;
+
+        for (Client client : databaseClients) {
+                count++;
+        }
+
+        if (count == 1) {
             try {
-                throw new NonexistentException();
-            } catch (NonexistentException e) {
-                e.getNullDataBaseMsg();
+                throw new ClientException();
+            } catch (ClientException e) {
+                e.getLastClientMsg();
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean isLastCardAtDataBase() {
+        int count = 0;
+
+        for (Client client : databaseClients) {
+            for (Card clientCard : client.getClientCards()) {
+                count++;
+            }
+        }
+        if (count == 1) {
+            System.out.println("низя");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isLastCardAtClient() {
+        if (currentClient.getClientCards().size() == 1) {
+            try {
+                throw new CardException();
+            } catch (CardException e) {
+                e.getClientHasNoCardMsg();
+                return false;
+            }
+        }
+        return true;
     }
 
     //вспомогательный метод для createClient
@@ -321,7 +367,7 @@ public class CashMachine extends Thread implements Terminal {
     }
 
     //вспомогательный метод для createCard
-    private boolean isCardNumberExist(String number) {
+    private boolean isCardAlreadyExist(String number) {
         for (Client client : databaseClients) {
             for (Card clientCard : client.getClientCards()) {
                 if (clientCard.getNumber().equals(number)) {
@@ -379,15 +425,18 @@ public class CashMachine extends Thread implements Terminal {
             if (!isPinCorrect(Pin)) {
                 wrongCountEnteredPin++;
                 try {
-                    throw new WrongPinException();
-                } catch (WrongPinException e) {
+                    throw new CardException();
+                } catch (CardException e1) {
 
                     if (wrongCountEnteredPin == 3) {
-                        System.out.println("Вы 3 раза не правильно ввели PIN-код, ваша карта блокируется");
 
-                        this.start();
-                        //блокировка
-                        wrongCountEnteredPin = 0;
+                        try {
+                            throw new BlockException();
+                        } catch (BlockException e2) {
+                            e2.getCardBlockedMsg();
+                            this.start();
+                            wrongCountEnteredPin = 0;
+                        }
                     }
 
                     if (wrongCountEnteredPin > 0) {
@@ -409,10 +458,10 @@ public class CashMachine extends Thread implements Terminal {
     }
 
     Card chooseCard(String cardNumber) {
-        //String cardNumber = Run.getInputStr();
-        if (isDatabaseClientsEmpty()) return currentCard;
 
-        if (isCardNumberExist(cardNumber)) {
+        if (isLastClientAtDatabase()) return currentCard;
+
+        if (isCardAlreadyExist(cardNumber)) {
 
             for (Client client : databaseClients) {
                 for (Card clientCard : client.getClientCards()) {
@@ -424,19 +473,5 @@ public class CashMachine extends Thread implements Terminal {
             }
         }
         return currentCard;
-    }
-
-    @Override
-    public void run() {
-        for (int i = 3; i > 0; i--) {
-            System.out.println("Карта разблокируется через " + i);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("Карта разблокирована!");
-        System.out.println("Введите PIN-код ещё раз");
     }
 }
