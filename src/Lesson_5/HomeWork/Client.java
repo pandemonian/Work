@@ -1,11 +1,12 @@
 package Lesson_5.HomeWork;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public class Client {
+public class Client implements Serializable{
 
     private String nameFirstLast;
     private String passportId;

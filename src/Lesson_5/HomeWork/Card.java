@@ -1,9 +1,11 @@
 package Lesson_5.HomeWork;
 
+import java.io.Serializable;
+
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public class Card {
+public class Card implements Serializable {
     private int moneyBalance;
     private String number;
     private String holder;

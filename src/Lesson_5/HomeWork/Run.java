@@ -1,8 +1,6 @@
 package Lesson_5.HomeWork;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
@@ -58,7 +56,7 @@ public class Run {
 
             inputStr = getInputStr();
 
-            if (inputStr.equals("exit"))  return;
+            if (inputStr.equals("exit"))  break;
             if (inputStr.length() == 16)  bankomat.feedCard(bankomat.chooseCard(inputStr));
 
             while (true) {
@@ -90,5 +88,11 @@ public class Run {
                 if (inputStr.equals("9")) break;
             }
         }
+
+        FileOutputStream fileOutputStream = new FileOutputStream("Serialize.dat");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        objectOutputStream.writeObject(bankomat);
+        objectOutputStream.flush();
+        objectOutputStream.close();
     }
 }
