@@ -7,14 +7,14 @@ class Player implements SoccerPlayer {
 
     private String nickname;
     private Integer points;
-    private League league;
-    private Country country;
+    private LeagueName leagueName;
+    private CountryName countryName;
 
-    Player(String nickname, Integer points, League league, Country country) {
+    Player(String nickname, Integer points, LeagueName leagueName, CountryName countryName) {
         this.nickname = nickname;
         this.points = points;
-        this.league = league;
-        this.country = country;
+        this.leagueName = leagueName;
+        this.countryName = countryName;
     }
 
     @Override
@@ -27,13 +27,11 @@ class Player implements SoccerPlayer {
         return points;
     }
 
-    @Override
-    public League getLeague() {
-        return league;
+    public LeagueName getLeagueName() {
+        return leagueName;
     }
 
-    @Override
-    public Country getCountry() {
-        return country;
+    public CountryName getCountryName() {
+        return countryName;
     }
 }

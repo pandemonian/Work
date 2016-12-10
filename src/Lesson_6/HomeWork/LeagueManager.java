@@ -11,7 +11,7 @@ public interface LeagueManager {
     void removePlayer(SoccerPlayer player);
     SoccerPlayer getPlayer(String name);
     List<SoccerPlayer> getAllPlayers();
-    List<SoccerPlayer> getPlayers(League league);
-    List<SoccerPlayer> getPlayers(Country country);
+    List<SoccerPlayer> getPlayers(LeagueName leagueName);
+    List<SoccerPlayer> getPlayers(CountryName countryName);
     void addPoints(String name, int points);
 }

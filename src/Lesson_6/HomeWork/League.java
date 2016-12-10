@@ -1,8 +1,27 @@
 package Lesson_6.HomeWork;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by Gubanov Pavel on 08.12.16.
+ * Created by Gubanov Pavel on 10.12.16.
  */
-public enum League {
-    PREMIER_LEAGUE, FIRST_LEAGUE, SECOND_LEAGUE
+public class League {
+
+    private LeagueName leagueName;
+    private List<SoccerPlayer> soccerPlayers;
+
+    League(LeagueName leagueName, List<SoccerPlayer> soccerPlayers) {
+        this.leagueName = leagueName;
+        this.soccerPlayers = soccerPlayers;
+    }
+
+    public LeagueName getLeagueName() {
+        return leagueName;
+    }
+
+    public List<SoccerPlayer> getSoccerPlayers() {
+        return soccerPlayers;
+    }
+
 }

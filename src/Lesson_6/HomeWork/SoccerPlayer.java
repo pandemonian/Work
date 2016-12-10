@@ -7,6 +7,6 @@ public interface SoccerPlayer {
 
     String getNickName();
     Integer getPoints();
-    League getLeague();
-    Country getCountry();
+    LeagueName getLeagueName();
+    CountryName getCountryName();
 }

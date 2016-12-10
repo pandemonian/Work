@@ -8,13 +8,9 @@ import java.util.List;
 public class Manager implements LeagueManager {
 
     private String nickname;
-    private League league;
-    private Country country;
 
-    Manager(String nickname, League league, Country country) {
+    Manager(String nickname) {
         this.nickname = nickname;
-        this.league = league;
-        this.country = country;
     }
 
     @Override
@@ -38,12 +34,12 @@ public class Manager implements LeagueManager {
     }
 
     @Override
-    public List<SoccerPlayer> getPlayers(League league) {
+    public List<SoccerPlayer> getPlayers(LeagueName leagueName) {
         return null;
     }
 
     @Override
-    public List<SoccerPlayer> getPlayers(Country country) {
+    public List<SoccerPlayer> getPlayers(CountryName countryName) {
         return null;
     }
 
