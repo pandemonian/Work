@@ -14,4 +14,5 @@ public interface LeagueManager {
     List<SoccerPlayer> getPlayers(LeagueName leagueName);
     List<SoccerPlayer> getPlayers(CountryName countryName);
     void addPoints(String name, int points);
+    void manage(Championship champ);
 }

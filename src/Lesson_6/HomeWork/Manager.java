@@ -1,5 +1,6 @@
 package Lesson_6.HomeWork;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,6 +8,7 @@ import java.util.List;
  */
 public class Manager implements LeagueManager {
 
+    private Championship currentChampionship;
     private String nickname;
 
     Manager(String nickname) {
@@ -30,7 +32,16 @@ public class Manager implements LeagueManager {
 
     @Override
     public List<SoccerPlayer> getAllPlayers() {
-        return null;
+
+        List<SoccerPlayer> allPlayer = new ArrayList<>();
+        for (League league: currentChampionship.getAllLeagues()) {
+
+            allPlayer.addAll(league.getSoccerPlayers());
+            /*for (SoccerPlayer player: league.getSoccerPlayers()) {
+                allPlayer.add(player);
+            }*/
+        }
+        return allPlayer;
     }
 
     @Override
@@ -46,5 +57,10 @@ public class Manager implements LeagueManager {
     @Override
     public void addPoints(String name, int points) {
 
+    }
+
+    @Override
+    public void manage(Championship champ) {
+        currentChampionship = champ;
     }
 }

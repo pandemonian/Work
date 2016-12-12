@@ -1,5 +1,8 @@
 package Lesson_6.HomeWork;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,14 +11,19 @@ import java.util.Random;
  * Created by Gubanov Pavel on 08.12.16.
  */
 public class Run {
-    static Random random = new Random();
+    static private Random random = new Random();
+    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private static String inputStr;
 
-
-    public static void main(String[] args) {
-
-        System.out.println();
+    static String getInputStr() {
+        try {
+            return br.readLine();
+        } catch (IOException e) {
+            System.out.println("Ошибка ввода/вывода!");
+            return "";
+        }
     }
-
+    
     static String getRandomFio() {
         String[] firstName = {"Алексей", "Андрей", "Анатолий", "Фёдор", "Павел", "Олег", "Николай", "Виктор",
                 "Михаил", "Евгений", "Владимир", "Лев", "Василий", "Илья", "Григорий", "Ярослав", "Георгий", "Дмитрий",
@@ -53,7 +61,7 @@ public class Run {
     static LeagueName getRandomLeagueName() {
         int randomDigit = random.nextInt(3) + 1;
 
-        if (randomDigit == 1)  return LeagueName.ПРЕМЬЕР_ЛИГА
+        if (randomDigit == 1)  return LeagueName.ПРЕМЬЕР_ЛИГА;
         if (randomDigit == 2)  return LeagueName.ПЕРВАЯ_ЛИГА;
         else  return LeagueName.ВТОРАЯ_ЛИГА;
     }
@@ -66,38 +74,55 @@ public class Run {
         else return random.nextInt(4) + 2;
     }
 
-    static iniLeague(String nickName, CountryName countryName, LeagueName leagueName, int rating) {
-        //создаём премьер-лигу(16 комманд по 11 человек)
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 11 ; j++) {
-
-            }
-
-        }
-    }
-
     void initChampionship(Championship champ) {
 
         LeagueName l1 = LeagueName.ПРЕМЬЕР_ЛИГА;
         LeagueName l2 = LeagueName.ПЕРВАЯ_ЛИГА;
         LeagueName l3 = LeagueName.ВТОРАЯ_ЛИГА;
 
-        champ.getAllLeagues().add(new League(l1, initPlayers(l1)));
-        champ.getAllLeagues().add(new League(l2, initPlayers(l2)));
-        champ.getAllLeagues().add(new League(l3, initPlayers(l3)));
+        champ.getAllLeagues().add(new League(l1, initLeague(l1)));
+        champ.getAllLeagues().add(new League(l2, initLeague(l2)));
+        champ.getAllLeagues().add(new League(l3, initLeague(l3)));
     }
 
-    List<SoccerPlayer> initPlayers(LeagueName league) {
+    List<SoccerPlayer> initLeague(LeagueName league) {
 
-        List<SoccerPlayer> temp = new ArrayList<>();
+        List<SoccerPlayer> leaguePlayers = new ArrayList<>();
 
             for (int team = 0; team < 16; team++) {
                 for (int player = 0; player < 11; player++) {
-
-                    temp.add(new Player(getRandomFio(), getRandomPoints(), league, getRandomCountryName()));
+                    leaguePlayers.add(new Player(getRandomFio(), getRandomPoints(), league, getRandomCountryName()));
                 }
             }
-        return temp;
+        return leaguePlayers;
+    }
+
+    static boolean isInputIsLeagueName() {
+        inputStr = getInputStr();
+        return (inputStr.equals(LeagueName.ПРЕМЬЕР_ЛИГА) || inputStr.equals(LeagueName.ПЕРВАЯ_ЛИГА)
+                || inputStr.equals(LeagueName.ВТОРАЯ_ЛИГА));
+    }
+
+    static void printOut(List<SoccerPlayer> soccerPlayers) {
+        for (SoccerPlayer player: soccerPlayers) {
+            System.out.println(player.getNickName() + ", страна: " + player.getCountryName() + ", лига: "
+                    + player.getLeagueName() + ", рейтинг: " + player.getPoints());
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Run run = new Run();
+        Championship russianChamp = new Championship();
+        LeagueManager leagueManager = new Manager("Астрелин Артём Каримович");
+
+        run.initChampionship(russianChamp);
+        leagueManager.manage(russianChamp);
+
+        printOut(leagueManager.getAllPlayers());
+
+
+        //System.out.println(isInputIsLeagueName());
     }
 
 
