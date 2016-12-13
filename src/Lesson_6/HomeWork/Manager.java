@@ -35,23 +35,33 @@ public class Manager implements LeagueManager {
 
         List<SoccerPlayer> allPlayer = new ArrayList<>();
         for (League league: currentChampionship.getAllLeagues()) {
-
             allPlayer.addAll(league.getSoccerPlayers());
-            /*for (SoccerPlayer player: league.getSoccerPlayers()) {
-                allPlayer.add(player);
-            }*/
         }
         return allPlayer;
     }
 
     @Override
     public List<SoccerPlayer> getPlayers(LeagueName leagueName) {
-        return null;
+
+        List<SoccerPlayer> allPlayer = new ArrayList<>();
+        for (League league: currentChampionship.getAllLeagues()) {
+            for (SoccerPlayer player: league.getSoccerPlayers()) {
+                if (player.getLeagueName().equals(leagueName))  allPlayer.add(player);
+            }
+        }
+        return allPlayer;
     }
 
     @Override
     public List<SoccerPlayer> getPlayers(CountryName countryName) {
-        return null;
+
+        List<SoccerPlayer> allPlayer = new ArrayList<>();
+        for (League league: currentChampionship.getAllLeagues()) {
+            for (SoccerPlayer player: league.getSoccerPlayers()) {
+                if (player.getCountryName().equals(countryName))  allPlayer.add(player);
+            }
+        }
+        return allPlayer;
     }
 
     @Override

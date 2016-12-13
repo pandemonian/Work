@@ -34,4 +34,9 @@ class Player implements SoccerPlayer {
     public CountryName getCountryName() {
         return countryName;
     }
+
+    @Override
+    public int compareTo(Object o) {
+        return ((SoccerPlayer)o).getPoints() - this.getPoints();
+    }
 }

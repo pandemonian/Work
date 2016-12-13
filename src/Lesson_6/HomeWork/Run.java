@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -89,7 +90,7 @@ public class Run {
 
         List<SoccerPlayer> leaguePlayers = new ArrayList<>();
 
-            for (int team = 0; team < 16; team++) {
+            for (int team = 0; team < 6; team++) {
                 for (int player = 0; player < 11; player++) {
                     leaguePlayers.add(new Player(getRandomFio(), getRandomPoints(), league, getRandomCountryName()));
                 }
@@ -104,6 +105,9 @@ public class Run {
     }
 
     static void printOut(List<SoccerPlayer> soccerPlayers) {
+
+        Collections.sort(soccerPlayers);
+
         for (SoccerPlayer player: soccerPlayers) {
             System.out.println(player.getNickName() + ", страна: " + player.getCountryName() + ", лига: "
                     + player.getLeagueName() + ", рейтинг: " + player.getPoints());
@@ -120,6 +124,10 @@ public class Run {
         leagueManager.manage(russianChamp);
 
         printOut(leagueManager.getAllPlayers());
+        System.out.println("============================================================");
+        printOut(leagueManager.getPlayers(LeagueName.ПРЕМЬЕР_ЛИГА));
+        System.out.println("============================================================");
+        printOut(leagueManager.getPlayers(CountryName.Беларусь));
 
 
         //System.out.println(isInputIsLeagueName());
