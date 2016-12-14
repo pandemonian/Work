@@ -1,27 +1,22 @@
 package Lesson_6.HomeWork;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Gubanov Pavel on 10.12.16.
  */
-public class League {
+class League {
 
     private LeagueName leagueName;
-    private List<SoccerPlayer> soccerPlayers;
+    private List<SoccerPlayer> soccerTeam;
 
-    League(LeagueName leagueName, List<SoccerPlayer> soccerPlayers) {
+    League(LeagueName leagueName, List<SoccerPlayer> soccerTeam) {
         this.leagueName = leagueName;
-        this.soccerPlayers = soccerPlayers;
+        this.soccerTeam = soccerTeam;
     }
 
-    public LeagueName getLeagueName() {
-        return leagueName;
-    }
-
-    public List<SoccerPlayer> getSoccerPlayers() {
-        return soccerPlayers;
+    List<SoccerPlayer> getSoccerTeam() {
+        return soccerTeam;
     }
 
 }

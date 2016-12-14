@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Gubanov Pavel on 08.12.16.
  */
-public interface LeagueManager {
+interface LeagueManager {
 
     void addPlayer(SoccerPlayer player);
     void removePlayer(SoccerPlayer player);
