@@ -16,7 +16,14 @@ public class Run {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static String inputStr;
 
-    static String getInputStr() {
+    private static Championship russianChamp;
+    private static LeagueManager leagueManager;
+
+
+
+
+
+    private static String getInputStr() {
         try {
             return br.readLine();
         } catch (IOException e) {
@@ -25,7 +32,7 @@ public class Run {
         }
     }
     
-    static String getRandomFio() {
+    private static String getRandomFio() {
         String[] firstName = {"Алексей", "Андрей", "Анатолий", "Фёдор", "Павел", "Олег", "Николай", "Виктор",
                 "Михаил", "Евгений", "Владимир", "Лев", "Василий", "Илья", "Григорий", "Ярослав", "Георгий", "Дмитрий",
                 "Борис", "Александр"};
@@ -51,7 +58,7 @@ public class Run {
         return result.toString();
     }
 
-    static CountryName getRandomCountryName() {
+    private static CountryName getRandomCountryName() {
         int randomDigit = random.nextInt(3) + 1;
 
         if (randomDigit == 1)  return CountryName.Россия;
@@ -59,7 +66,7 @@ public class Run {
         else  return CountryName.Беларусь;
     }
 
-    static LeagueName getRandomLeagueName() {
+    private static LeagueName getRandomLeagueName() {
         int randomDigit = random.nextInt(3) + 1;
 
         if (randomDigit == 1)  return LeagueName.ПРЕМЬЕР_ЛИГА;
@@ -67,7 +74,7 @@ public class Run {
         else  return LeagueName.ВТОРАЯ_ЛИГА;
     }
 
-    static int getRandomPoints() {
+    private static int getRandomPoints() {
         //минимизируем ситуацию получениея низкого рейтинга большим количеством игроков
         int chance = random.nextInt(11);
 
@@ -75,36 +82,34 @@ public class Run {
         else return random.nextInt(4) + 2;
     }
 
-    void initChampionship(Championship champ) {
+    private static void initChampionship() {
 
         LeagueName l1 = LeagueName.ПРЕМЬЕР_ЛИГА;
         LeagueName l2 = LeagueName.ПЕРВАЯ_ЛИГА;
         LeagueName l3 = LeagueName.ВТОРАЯ_ЛИГА;
+        
+        
 
-        champ.getAllLeagues().add(new League(l1, initLeague(l1)));
-        champ.getAllLeagues().add(new League(l2, initLeague(l2)));
-        champ.getAllLeagues().add(new League(l3, initLeague(l3)));
+        russianChamp.getAllLeagues().add(new League(l1, initLeague(l1)));
+        russianChamp.getAllLeagues().add(new League(l2, initLeague(l2)));
+        russianChamp.getAllLeagues().add(new League(l3, initLeague(l3)));
     }
 
-    List<SoccerPlayer> initLeague(LeagueName league) {
+    private static List<SoccerPlayer> initLeague(LeagueName league) {
 
         List<SoccerPlayer> leaguePlayers = new ArrayList<>();
 
-            for (int team = 0; team < 6; team++) {
-                for (int player = 0; player < 11; player++) {
+            for (int team = 0; team < 1; team++) {
+                for (int player = 0; player < 2; player++) {
                     leaguePlayers.add(new Player(getRandomFio(), getRandomPoints(), league, getRandomCountryName()));
                 }
             }
         return leaguePlayers;
     }
 
-    static boolean isInputIsLeagueName() {
-        inputStr = getInputStr();
-        return (inputStr.equals(LeagueName.ПРЕМЬЕР_ЛИГА) || inputStr.equals(LeagueName.ПЕРВАЯ_ЛИГА)
-                || inputStr.equals(LeagueName.ВТОРАЯ_ЛИГА));
-    }
+    private static void printAllPlayers() {
 
-    static void printOut(List<SoccerPlayer> soccerPlayers) {
+        List<SoccerPlayer> soccerPlayers = leagueManager.getAllPlayers();
 
         Collections.sort(soccerPlayers);
 
@@ -114,21 +119,119 @@ public class Run {
         }
     }
 
+    private static void printAllPlayersViaLeague() {
+        LeagueName name;
+        String input;
+
+        System.out.println("Введите название лиги по которой будет происходить сортировка:");
+
+        while (true) {
+            input = getInputStr().trim().toLowerCase();
+
+            if (input.equals("премьер лига")) {
+                name = LeagueName.ПРЕМЬЕР_ЛИГА;
+                break;
+            } if (input.equals("первая лига")) {
+                name = LeagueName.ПЕРВАЯ_ЛИГА;
+                break;
+            } if (input.equals("вторая лига")) {
+                name = LeagueName.ВТОРАЯ_ЛИГА;
+                break;
+            }
+
+            System.out.println("Введите правильное название лиги(премьер лига, вторая лига и т.д.)!");
+        }
+
+        List<SoccerPlayer> soccerPlayers = leagueManager.getPlayers(name);
+
+        Collections.sort(soccerPlayers);
+
+        for (SoccerPlayer player: soccerPlayers) {
+            System.out.println(player.getNickName() + ", страна: " + player.getCountryName() + ", лига: "
+                    + player.getLeagueName() + ", рейтинг: " + player.getPoints());
+        }
+    }
+
+    private static void printAllPlayersViaCountry() {
+        CountryName name;
+        String input;
+
+        System.out.println("Введите название страны происхождения игрока по которой будет происходить сортировка:");
+
+        while (true) {
+            input = getInputStr().trim().toLowerCase();
+
+            if (input.equals("россия")) {
+                name = CountryName.Россия;
+                break;
+            } if (input.equals("украина")) {
+                name = CountryName.Украина;
+                break;
+            } if (input.equals("беларусь")) {
+                name = CountryName.Беларусь;
+                break;
+            }
+
+            System.out.println("Введите правильное название страны:(Россия, Украина, Беларусь)!");
+        }
+
+        List<SoccerPlayer> soccerPlayers = leagueManager.getPlayers(name);
+
+        Collections.sort(soccerPlayers);
+
+        for (SoccerPlayer player: soccerPlayers) {
+            System.out.println(player.getNickName() + ", страна: " + player.getCountryName() + ", лига: "
+                    + player.getLeagueName() + ", рейтинг: " + player.getPoints());
+        }
+    }
+
+    static void printAddPoints() {
+        System.out.println("Введите ФИО игрока кому нужно добавить очки");
+        String name = getInputStr();
+        System.out.println("Введите количество очков, которое хотите добавить игроку");
+        int points = Integer.parseInt(getInputStr());
+
+        leagueManager.addPoints(name, points);
+   }
+
     public static void main(String[] args) {
 
-        Run run = new Run();
-        Championship russianChamp = new Championship();
-        LeagueManager leagueManager = new Manager("Астрелин Артём Каримович");
+        russianChamp = new Championship();
+        leagueManager = new Manager("Астрелин Артём Каримович");
 
-        run.initChampionship(russianChamp);
+        initChampionship();
         leagueManager.manage(russianChamp);
 
-        printOut(leagueManager.getAllPlayers());
-        System.out.println("============================================================");
+        //printAllPlayersViaLeague();
+        //System.out.println("===========");
+        //printAllPlayersViaCountry();
+
+        //printAddPoints();
+
+        printAllPlayers();
+
+        while (true) {
+            System.out.println("Выберите действие:");
+            String input = getInputStr();
+
+            if (input.equals("1")) printAllPlayersViaCountry();
+            if (input.equals("2")) printAddPoints();
+
+        }
+
+
+
+
+        /*while (true) {
+            if (getInputStr().equals(3)) {
+                leagueManager.addPoints();
+            }
+        }*/
+        /*System.out.println("============================================================");
         printOut(leagueManager.getPlayers(LeagueName.ПРЕМЬЕР_ЛИГА));
         System.out.println("============================================================");
         printOut(leagueManager.getPlayers(CountryName.Беларусь));
-
+*/
 
         //System.out.println(isInputIsLeagueName());
     }

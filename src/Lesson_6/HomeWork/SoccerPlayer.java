@@ -7,6 +7,7 @@ public interface SoccerPlayer extends Comparable {
 
     String getNickName();
     Integer getPoints();
+    void setPoints(int points);
     LeagueName getLeagueName();
     CountryName getCountryName();
 

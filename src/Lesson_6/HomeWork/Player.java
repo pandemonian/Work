@@ -23,6 +23,11 @@ class Player implements SoccerPlayer {
     }
 
     @Override
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    @Override
     public Integer getPoints() {
         return points;
     }
