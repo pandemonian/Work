@@ -319,7 +319,7 @@ public class Run {
             if (input.equals("4"))  addPoints();
             if (input.equals("5"))  addPlayer();
             if (input.equals("6"))  removePlayer();
-            if (input.equals("9"))  break;
+            if (input.equals("7"))  break;
         }
     }
 }
