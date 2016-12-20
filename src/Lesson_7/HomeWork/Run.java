@@ -43,24 +43,30 @@ public class Run {
         else return new Barbarian(nameWarrior, teamName);
     }
 
-    private static void initNameTeams() {
+    static void initNameTeams() {
 
-        System.out.println("Выберите название первого отряда:");
-
-        if (!(inputStr = getInput()).equals(""))  team1Name = inputStr;
+        inputStr = Gui.getfieldFirstNameTeam();
+        if (!inputStr.equals("")) {
+            team1Name = inputStr;
+            Gui.setLog("Название первой команды: ", team1Name);
+            Gui.setLog("---------------------------------------------------------------------");
+        }
         else {
-            System.out.println("Ничего не введено, указано название отряда по-умолчанию - \"England\"");
+            Gui.setLog("Ничего не введено, указано название первого отряда по-умолчанию - \"England\"");
             team1Name = "England";
-            System.out.println("---------------------------------------------------------------------");
+            Gui.setLog("---------------------------------------------------------------------");
         }
 
-        System.out.println("Выберите название второго отряда:");
-
-        if (!(inputStr = getInput()).equals(""))  team2Name = inputStr;
+        inputStr = Gui.getfieldSecondNameTeam();
+        if (!inputStr.equals("")) {
+            team2Name = inputStr;
+            Gui.setLog("Название второй команды: ", team2Name);
+            Gui.setLog("---------------------------------------------------------------------");
+        }
         else {
-            System.out.println("Ничего не введено, указано название отряда по-умолчанию - \"France\"");
+            Gui.setLog("Ничего не введено, указано название второго отряда по-умолчанию - \"France\"");
             team2Name = "France";
-            System.out.println("---------------------------------------------------------------------");
+            Gui.setLog("---------------------------------------------------------------------");
         }
     }
 
@@ -168,7 +174,8 @@ public class Run {
 
     public static void main(String[] args) {
 
-        initNameTeams();
+        new Gui();
+        //initNameTeams();
         initCountWarriorsAtTeams();
         initNameAndTypeWarriors();
 
