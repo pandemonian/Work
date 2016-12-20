@@ -27,13 +27,15 @@ public class Gui extends JFrame {
     private JButton buttonStartFight;
     private static JTextArea fieldFirstNameTeam;
     private static JTextArea fieldSecondNameTeam;
-    private JTextArea fieldNameWarrior;
-    private TextArea fieldFirstTeamWarriorList;
-    private TextArea fieldSecondTeamWarriorList;
-    private JComboBox<String> comboBoxTeam;
-    private JComboBox<String> comboBoxTypeWarrior;
+    private static JTextArea fieldNameWarrior;
+    private static TextArea fieldFirstTeamWarriorList;
+    private static TextArea fieldSecondTeamWarriorList;
+    private static JComboBox<String> comboBoxTeam;
+    private static JComboBox<String> comboBoxTypeWarrior;
     private static TextArea log;
-    private static StringBuilder stringBuilder = new StringBuilder();
+    private static StringBuilder stringBuilderLog1 = new StringBuilder();
+    private static StringBuilder stringBuilderLog2 = new StringBuilder();
+
 
     Gui() {
         super("Приложение \"Битва\"");
@@ -102,27 +104,61 @@ public class Gui extends JFrame {
             }
         });
 
+        buttonAddWarrior.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Run.initNameAndTypeWarriors();
+                //fieldNameWarrior.setText("");
+            }
+        });
+
+
+
         add(bottomPanel, BorderLayout.SOUTH);
         add(centerPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);
         pack();
     }
 
-    public static String getfieldFirstNameTeam() {
+    public static String getFieldFirstNameTeam() {
         return fieldFirstNameTeam.getText();
     }
 
-    public static String getfieldSecondNameTeam() {
+    public static String getFieldSecondNameTeam() {
         return fieldSecondNameTeam.getText();
     }
 
-    public static void setLog(String text) {
-        stringBuilder.append(text).append("\n");
-        log.setText(stringBuilder.toString());
+    public static int getComboBoxTeam() {
+        return comboBoxTeam.getSelectedIndex();
     }
-    public static void setLog(String text1, String text2) {
-        stringBuilder.append(text1).append(text2).append("\n");
-        log.setText(stringBuilder.toString());
+
+    public static int getComboBoxTypeWarrior() {
+        return comboBoxTypeWarrior.getSelectedIndex();
+    }
+
+    public static String getFieldNameWarrior() {
+        return fieldNameWarrior.getText();
+    }
+
+    public static void setFieldFirstTeamWarriorList(String text) {
+        fieldFirstTeamWarriorList.setText(text + "\n");
+    }
+
+    public static void setFieldSecondTeamWarriorList(String text) {
+        fieldSecondTeamWarriorList.setText(text + "\n");
+    }
+
+    public static void setLog(String text) {
+        stringBuilderLog1.append(text).append("\n");
+        log.setText(stringBuilderLog1.toString());
+    }
+
+    public static void setLog2(String text1, String text2) {
+        stringBuilderLog2.append(text1);
+        stringBuilderLog2.append(" ");
+        stringBuilderLog2.append(text2);
+        //.append("\n");
+        log.setText(stringBuilderLog2.toString());
     }
 
 }
