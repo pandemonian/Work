@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.TextArea;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -92,28 +90,22 @@ class Gui extends JFrame {
             log.setEditable(false);
 
 
-        buttonSetTeamNames.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Run.initNameTeams();
-                buttonSetTeamNames.setEnabled(false);
-                buttonAddWarrior.setEnabled(true);
-            }
+        buttonSetTeamNames.addActionListener(e -> {
+            Run.initNameTeams();
+            buttonSetTeamNames.setEnabled(false);
+            buttonAddWarrior.setEnabled(true);
         });
 
-        buttonAddWarrior.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Run.initNameAndTypeWarriors();
-                if (Run.isTeamsNotEmpty()) buttonStartFight.setEnabled(true);
-            }
+        buttonAddWarrior.addActionListener(e -> {
+            Run.initNameAndTypeWarriors();
+            if (Run.isTeamsNotEmpty()) buttonStartFight.setEnabled(true);
         });
 
-        buttonStartFight.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Run.initFight();
-            }
+        buttonStartFight.addActionListener(e -> {
+            Run.initFight();
+            buttonAddWarrior.setEnabled(false);
+            buttonStartFight.setEnabled(false);
+
         });
 
 
