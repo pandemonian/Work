@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,10 +19,8 @@ import javax.swing.JFrame;
 /**
  * Created by Gubanov Pavel on 19.12.16.
  */
-public class Gui extends JFrame {
+class Gui extends JFrame {
 
-    //private Gui frame;
-    private JLabel labelWarriorName;
     private JButton buttonSetTeamNames;
     private JButton buttonAddWarrior;
     private JButton buttonStartFight;
@@ -33,9 +32,9 @@ public class Gui extends JFrame {
     private static JComboBox<String> comboBoxTeam;
     private static JComboBox<String> comboBoxTypeWarrior;
     private static TextArea log;
-    private static StringBuilder stringBuilderLog1 = new StringBuilder();
-    private static StringBuilder stringBuilderLog2 = new StringBuilder();
-
+    private static StringBuilder stringBuilder1 = new StringBuilder();
+    private static StringBuilder stringBuilder2 = new StringBuilder();
+    private static StringBuilder stringBuilder = new StringBuilder();
 
     Gui() {
         super("Приложение \"Битва\"");
@@ -45,17 +44,11 @@ public class Gui extends JFrame {
         initComponents();
     }
 
-
-
-
-
-
-
     private void initComponents() {
 
         buttonSetTeamNames = new JButton("Задать имена командам");
         buttonStartFight = new JButton("Начать битву");
-        labelWarriorName = new JLabel("Имя война");
+        JLabel labelWarriorName = new JLabel("Имя война");
         buttonAddWarrior = new JButton("Добавить война в отряд");
         fieldFirstNameTeam = new JTextArea("Название первой команды", 2, 20);
         fieldSecondNameTeam = new JTextArea("Название второй команды", 2, 20);
@@ -75,6 +68,7 @@ public class Gui extends JFrame {
         JPanel panelStartFight = new JPanel(new GridLayout(2, 1, 5, 40));
         panelStartFight.add(comboBoxTeam);
         panelStartFight.add(buttonStartFight);
+            buttonStartFight.setEnabled(false);
 
         JPanel panelWarriorInfo = new JPanel(new GridLayout(4, 1, 5, 20));
         topPanel.setBackground(Color.LIGHT_GRAY);
@@ -82,6 +76,7 @@ public class Gui extends JFrame {
         panelWarriorInfo.add(fieldNameWarrior);
         panelWarriorInfo.add(comboBoxTypeWarrior);
         panelWarriorInfo.add(buttonAddWarrior);
+            buttonAddWarrior.setEnabled(false);
 
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 22, 10));
         topPanel.setBackground(Color.LIGHT_GRAY);
@@ -94,13 +89,15 @@ public class Gui extends JFrame {
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(log);
-        log.setEditable(false);
+            log.setEditable(false);
+
 
         buttonSetTeamNames.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Run.initNameTeams();
                 buttonSetTeamNames.setEnabled(false);
+                buttonAddWarrior.setEnabled(true);
             }
         });
 
@@ -108,10 +105,16 @@ public class Gui extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Run.initNameAndTypeWarriors();
-                //fieldNameWarrior.setText("");
+                if (Run.isTeamsNotEmpty()) buttonStartFight.setEnabled(true);
             }
         });
 
+        buttonStartFight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Run.initFight();
+            }
+        });
 
 
         add(bottomPanel, BorderLayout.SOUTH);
@@ -120,45 +123,41 @@ public class Gui extends JFrame {
         pack();
     }
 
-    public static String getFieldFirstNameTeam() {
+    static String getFieldFirstNameTeam() {
         return fieldFirstNameTeam.getText();
     }
 
-    public static String getFieldSecondNameTeam() {
+    static String getFieldSecondNameTeam() {
         return fieldSecondNameTeam.getText();
     }
 
-    public static int getComboBoxTeam() {
+    static int getComboBoxTeam() {
         return comboBoxTeam.getSelectedIndex();
     }
 
-    public static int getComboBoxTypeWarrior() {
+    static int getComboBoxTypeWarrior() {
         return comboBoxTypeWarrior.getSelectedIndex();
     }
 
-    public static String getFieldNameWarrior() {
+    static String getFieldNameWarrior() {
         return fieldNameWarrior.getText();
     }
 
-    public static void setFieldFirstTeamWarriorList(String text) {
-        fieldFirstTeamWarriorList.setText(text + "\n");
+    static void setFieldFirstTeamWarriorList(String text1, String text2) {
+        stringBuilder1.append(text1).append(" ").append(text2).append("\n");
+        fieldFirstTeamWarriorList.setText(stringBuilder1.toString());
     }
 
-    public static void setFieldSecondTeamWarriorList(String text) {
-        fieldSecondTeamWarriorList.setText(text + "\n");
+    static void setFieldSecondTeamWarriorList(String text1, String text2) {
+        stringBuilder2.append(text1).append(" ").append(text2).append("\n");
+        fieldSecondTeamWarriorList.setText(stringBuilder2.toString());
     }
 
-    public static void setLog(String text) {
-        stringBuilderLog1.append(text).append("\n");
-        log.setText(stringBuilderLog1.toString());
-    }
-
-    public static void setLog2(String text1, String text2) {
-        stringBuilderLog2.append(text1);
-        stringBuilderLog2.append(" ");
-        stringBuilderLog2.append(text2);
-        //.append("\n");
-        log.setText(stringBuilderLog2.toString());
+    static void setLog(String ... arg) {
+        Arrays.stream(arg)
+                .forEach(t-> stringBuilder.append(t));
+        stringBuilder.append("\n");
+        log.setText(stringBuilder.toString());
     }
 
 }

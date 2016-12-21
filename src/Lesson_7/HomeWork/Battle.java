@@ -14,22 +14,21 @@ class Battle {
         if (crew1.hasAliveWarriors() && crew2.hasAliveWarriors()) {
 
             while (true) {
-                iTeam1 = Squad.random.nextInt(crew1.team.length);
-                if (crew1.team[iTeam1].isAlive()) break;
+                iTeam1 = Squad.random.nextInt(crew1.team.size());
+                if (crew1.team.get(iTeam1).isAlive()) break;
             }
 
             while (true) {
-                iTeam2 = Squad.random.nextInt(crew2.team.length);
-                if (crew2.team[iTeam2].isAlive()) break;
+                iTeam2 = Squad.random.nextInt(crew2.team.size());
+                if (crew2.team.get(iTeam2).isAlive()) break;
             }
 
-            crew1.team[iTeam1].attackingUnit(crew2.team[iTeam2]);
+            crew1.team.get(iTeam1).attackingUnit(crew2.team.get(iTeam2));
 
-            System.out.println(crew1.team[iTeam1].getClass().getSimpleName() + " "
-                    + crew1.team[iTeam1].getName() + " из отряда \"" +
-                    crew1 + "\" нанёс " + crew2.team[iTeam2].getClass().getSimpleName() + "`у "
-                    + crew2.team[iTeam2].getName() + " из отряда \"" + crew2 + " "
-                    + crew1.team[iTeam1].getDamage() + " единиц урона!");
+            Gui.setLog(crew1.team.get(iTeam1).getClass().getSimpleName(), " ", crew1.team.get(iTeam1).getName(),
+                    " из отряда \"", crew1.getName(), "\" нанёс ", crew2.team.get(iTeam2).getClass().getSimpleName(),
+                    "`у ", crew2.team.get(iTeam2).getName(), " из отряда \"", crew2.getName(), "\" ",
+                    String.valueOf(crew1.team.get(iTeam1).getDamage()), " единиц урона!");
         }
     }
 
@@ -39,10 +38,9 @@ class Battle {
     }
 
     void winnerIs(Squad crew1, Squad crew2) {
-        if (crew1.hasAliveWarriors()) System.out.println("Отряд \"" + crew1.getName() + "\" победил " +
-                "уничтожив отряд \"" + crew2.getName() + "\"");
+        if (crew1.hasAliveWarriors())
+            Gui.setLog("Отряд \"", crew1.getName(), "\" победил, ", "уничтожив отряд \"", crew2.getName(), "\"");
 
-        else System.out.println("Отряд \"" + crew2.getName() + "\" победил " +
-                "уничтожив отряд \"" + crew1.getName() + "\"");
+        else  Gui.setLog("Отряд \"", crew2.getName(), "\" победил, ", "уничтожив отряд \"", crew1.getName(), "\"");
     }
 }

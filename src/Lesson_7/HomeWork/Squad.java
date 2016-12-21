@@ -1,5 +1,7 @@
 package Lesson_7.HomeWork;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -9,20 +11,11 @@ class Squad implements Cloneable {
 
     static Random random = new Random();
     private String name;
-    Warrior[] team;
+    List<Warrior> team;
 
-    Squad(String name, Warrior[] team) {
+    Squad(String name, List<Warrior> team) {
         this.name = name;
-
-        this.team = new Warrior[team.length];
-
-        for (int i = 0; i < this.team.length; i++) {
-            try {
-                this.team[i] = team[i].clone();
-            } catch (CloneNotSupportedException e) {
-                System.out.println("Клонирование не удалось!!!");
-            }
-        }
+        this.team = team;
     }
 
     String getName() {
@@ -31,7 +24,7 @@ class Squad implements Cloneable {
 
     boolean hasAliveWarriors() {
         for (Warrior warrior: team) {
-            if (warrior.isAlive()) return true;  //тут нелья написать наподобие return warrior.isAlive()
+            if (warrior.isAlive()) return true;
         }
         return false;
     }
@@ -45,10 +38,10 @@ class Squad implements Cloneable {
     protected Squad clone() throws CloneNotSupportedException {
         Squad obj = (Squad)super.clone();
         obj.name = name;
-        obj.team = new Warrior[team.length];
+        obj.team = new ArrayList<>();
 
-        for (int i = 0; i < obj.team.length; i++) {
-            obj.team[i] = team[i].clone();
+        for (int i = 0; i < obj.team.size(); i++) {
+            obj.team.set(i ,team.get(i).clone());
         }
         return obj;
     }
