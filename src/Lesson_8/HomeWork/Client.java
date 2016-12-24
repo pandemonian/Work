@@ -1,4 +1,4 @@
-package Lesson_5.HomeWork;
+package Lesson_8.HomeWork;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,13 +6,13 @@ import java.util.ArrayList;
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-class Client implements Serializable{
+public class Client implements Serializable{
 
     private String nameFirstLast;
     private String passportId;
     private ArrayList<Card> clientCards;
 
-    Client(String nameFirstLast, String passportId) {
+    public Client(String nameFirstLast, String passportId) {
         clientCards = new ArrayList<>();
         this.nameFirstLast = nameFirstLast;
         this.passportId = passportId;
