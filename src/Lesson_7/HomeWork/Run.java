@@ -6,9 +6,9 @@ import java.util.List;
 /**
  * Created by Gubanov Pavel on 25.11.16.
  */
-public class Run {
+public class Run { //класс используется для запуска программы и показа окна. в нем не должно быть больше никакой логики
 
-    private static String team1Name;
+    private static String team1Name; //почему все поля и методы статичные?
     private static String team2Name;
     private static List<Warrior> team1 = new ArrayList<>();
     private static List<Warrior> team2 = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Run {
 
     static void initNameAndTypeWarriors() {
         List<Warrior> currentTeam = null;
-        String currentTeamName = "";
+        String currentTeamName = ""; //сюда все равно по умолчанию записывается "Название первой команды"
         String currentTypeWarrior = "";
         String nameWarrior = Gui.getFieldNameWarrior();
         int indexTeam = Gui.getComboBoxTeam();
@@ -64,11 +64,11 @@ public class Run {
         if (indexTeam == 1){
             currentTeam = team2;
             currentTeamName = team2Name;
-        }
+        } //в таком случае якобы остается вариант, когда currentTeam = null. на самом деле такого варианта не должно быть. если не 1, то 2
 
         if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
 
-        if (indexTypeWarrior == 0) {
+        if (indexTypeWarrior == 0) { //для множественного выбора лучше использовать switch
             currentTeam.add(new Viking(nameWarrior, currentTeamName));
             currentTypeWarrior = "Viking";
         }
@@ -104,7 +104,7 @@ public class Run {
                 break;
             }
 
-            greatBattle.striking(squad2, squad1);
+            greatBattle.striking(squad2, squad1); //2 раза одно и то же. вынести в отдельный метод
             DataHelper.skipTime();
             if (greatBattle.isAnyLoose(squad1, squad2)) {
                 greatBattle.winnerIs(squad1, squad2);

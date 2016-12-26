@@ -30,7 +30,7 @@ class Gui extends JFrame {
     private static JComboBox<String> comboBoxTeam;
     private static JComboBox<String> comboBoxTypeWarrior;
     private static TextArea log;
-    private static StringBuilder stringBuilder1 = new StringBuilder();
+    private static StringBuilder stringBuilder1 = new StringBuilder(); //неинформативные имена.
     private static StringBuilder stringBuilder2 = new StringBuilder();
     private static StringBuilder stringBuilder = new StringBuilder();
 

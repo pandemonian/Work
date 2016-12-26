@@ -5,7 +5,7 @@ package Lesson_7.HomeWork;
  */
 class Archer implements Warrior {
 
-    private int health = 80;
+    private int health = 80; //вынести одинаковое поведение в абстрактный класс
     private int damage = 80;
     private String squadName;
     private String name;
@@ -55,7 +55,7 @@ class Archer implements Warrior {
     @Override
     public Warrior clone() throws CloneNotSupportedException {
         Archer obj = (Archer) super.clone();
-        obj.health = health;
+        obj.health = health; //нет смысла клонировать примитивы и строки
         obj.damage = damage;
         obj.squadName = squadName;
         obj.name = name;
