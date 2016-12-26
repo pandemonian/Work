@@ -2,12 +2,14 @@ package Lesson_7.HomeWork;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Gubanov Pavel on 25.11.16.
  */
 public class Run {
 
+    private static Random random = new Random();
     private static String team1Name;
     private static String team2Name;
     private static List<Warrior> team1 = new ArrayList<>();
@@ -16,7 +18,7 @@ public class Run {
             "Irk", "Kellen", "Odin"};
 
     private static String getRandomNameWarrior() {
-        int index = Squad.random.nextInt(warriorName.length);
+        int index = random.nextInt(warriorName.length);
         return warriorName[index];
     }
 
@@ -68,17 +70,19 @@ public class Run {
 
         if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
 
-        if (indexTypeWarrior == 0) {
-            currentTeam.add(new Viking(nameWarrior, currentTeamName));
-            currentTypeWarrior = "Viking";
-        }
-        if (indexTypeWarrior == 1) {
-            currentTeam.add(new Archer(nameWarrior, currentTeamName));
-            currentTypeWarrior = "Archer";
-        }
-        if (indexTypeWarrior == 2) {
-            currentTeam.add(new Barbarian(nameWarrior, currentTeamName));
-            currentTypeWarrior = "Barbarian";
+        switch (indexTypeWarrior) {
+            case 0:
+                currentTeam.add(new Viking(nameWarrior, currentTeamName));
+                currentTypeWarrior = "Viking";
+                break;
+            case 1:
+                currentTeam.add(new Archer(nameWarrior, currentTeamName));
+                currentTypeWarrior = "Archer";
+                break;
+            case 2:
+                currentTeam.add(new Barbarian(nameWarrior, currentTeamName));
+                currentTypeWarrior = "Barbarian";
+                break;
         }
 
 

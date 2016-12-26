@@ -30,9 +30,9 @@ class Gui extends JFrame {
     private static JComboBox<String> comboBoxTeam;
     private static JComboBox<String> comboBoxTypeWarrior;
     private static TextArea log;
-    private static StringBuilder stringBuilder1 = new StringBuilder();
-    private static StringBuilder stringBuilder2 = new StringBuilder();
-    private static StringBuilder stringBuilder = new StringBuilder();
+    private static StringBuilder strBldrFirstWarriorList = new StringBuilder();
+    private static StringBuilder strBldrSecondWarriorList = new StringBuilder();
+    private static StringBuilder strBldrLog = new StringBuilder();
 
     Gui() {
         super("Приложение \"Битва\"");
@@ -136,20 +136,20 @@ class Gui extends JFrame {
     }
 
     static void setFieldFirstTeamWarriorList(String text1, String text2) {
-        stringBuilder1.append(text1).append(" ").append(text2).append("\n");
-        fieldFirstTeamWarriorList.setText(stringBuilder1.toString());
+        strBldrFirstWarriorList.append(text1).append(" ").append(text2).append("\n");
+        fieldFirstTeamWarriorList.setText(strBldrFirstWarriorList.toString());
     }
 
     static void setFieldSecondTeamWarriorList(String text1, String text2) {
-        stringBuilder2.append(text1).append(" ").append(text2).append("\n");
-        fieldSecondTeamWarriorList.setText(stringBuilder2.toString());
+        strBldrSecondWarriorList.append(text1).append(" ").append(text2).append("\n");
+        fieldSecondTeamWarriorList.setText(strBldrSecondWarriorList.toString());
     }
 
     static void setLog(String ... arg) {
         Arrays.stream(arg)
-                .forEach(t-> stringBuilder.append(t));
-        stringBuilder.append("\n");
-        log.setText(stringBuilder.toString());
+                .forEach(t-> strBldrLog.append(t));
+        strBldrLog.append("\n");
+        log.setText(strBldrLog.toString());
     }
 
 }

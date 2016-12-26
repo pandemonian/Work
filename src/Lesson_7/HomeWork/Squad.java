@@ -9,7 +9,6 @@ import java.util.Random;
  */
 class Squad implements Cloneable {
 
-    static Random random = new Random();
     private String name;
     List<Warrior> team;
 
