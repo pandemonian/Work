@@ -2,7 +2,6 @@ package Lesson_7.HomeWork;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Gubanov Pavel on 20.11.16.
@@ -10,7 +9,7 @@ import java.util.Random;
 class Squad implements Cloneable {
 
     private String name;
-    List<Warrior> team;
+    private List<Warrior> team;
 
     Squad(String name, List<Warrior> team) {
         this.name = name;
@@ -19,6 +18,14 @@ class Squad implements Cloneable {
 
     String getName() {
         return name;
+    }
+
+    Warrior getTeamWarrior(int index) {
+        return team.get(index);
+    }
+
+    int getTeamSize() {
+        return team.size();
     }
 
     boolean hasAliveWarriors() {

@@ -29,7 +29,6 @@ public class Run {
         if (!inputStr.equals("")) {
             team1Name = inputStr;
             Gui.setLog("Название первого отряда: ", team1Name);
-            //Gui.setLog2("123", "dfg");
         }
         else {
             Gui.setLog("Ничего не введено, указано название первого отряда по-умолчанию - ", "England");

@@ -19,12 +19,12 @@ class Battle {
             indexWarriorTeam1 = getRandomIndexWarriorTeam(crew1);
             indexWarriorTeam2 = getRandomIndexWarriorTeam(crew2);
 
-            crew1.team.get(indexWarriorTeam1).attackingUnit(crew2.team.get(indexWarriorTeam2));
+            crew1.getTeamWarrior(indexWarriorTeam1).attackingUnit(crew2.getTeamWarrior(indexWarriorTeam2));
 
-            Gui.setLog(crew1.team.get(indexWarriorTeam1).getClass().getSimpleName(), " ", crew1.team.get(indexWarriorTeam1).getName(),
-                    " из отряда \"", crew1.getName(), "\" нанёс ", crew2.team.get(indexWarriorTeam2).getClass().getSimpleName(),
-                    "`у ", crew2.team.get(indexWarriorTeam2).getName(), " из отряда \"", crew2.getName(), "\" ",
-                    String.valueOf(crew1.team.get(indexWarriorTeam1).getDamage()), " единиц урона!");
+            Gui.setLog(crew1.getTeamWarrior(indexWarriorTeam1).getClass().getSimpleName(), " ", crew1.getTeamWarrior(indexWarriorTeam1).getName(),
+                    " из отряда \"", crew1.getName(), "\" нанёс ", crew2.getTeamWarrior(indexWarriorTeam2).getClass().getSimpleName(),
+                    "`у ", crew2.getTeamWarrior(indexWarriorTeam2).getName(), " из отряда \"", crew2.getName(), "\" ",
+                    String.valueOf(crew1.getTeamWarrior(indexWarriorTeam1).getDamage()), " единиц урона!");
         }
     }
 
@@ -35,8 +35,8 @@ class Battle {
 
     private int getRandomIndexWarriorTeam(Squad crew) {
         while (true) {
-            int indexWarriorTeam = random.nextInt(crew.team.size());
-            if (crew.team.get(indexWarriorTeam).isAlive()) {
+            int indexWarriorTeam = random.nextInt(crew.getTeamSize());
+            if (crew.getTeamWarrior(indexWarriorTeam).isAlive()) {
                 return indexWarriorTeam;
             }
         }
