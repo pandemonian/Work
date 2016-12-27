@@ -102,7 +102,7 @@ class Gui extends JFrame {
         });
 
         buttonStartFight.addActionListener(e -> {
-            Run.initFight();
+            Run.startBattle();
             buttonAddWarrior.setEnabled(false);
             buttonStartFight.setEnabled(false);
 

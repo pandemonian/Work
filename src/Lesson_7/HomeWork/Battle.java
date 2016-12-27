@@ -30,7 +30,7 @@ class Battle {
 
     //возвращает true если только в одном из отрядов не осталось живых бойцов.
     boolean isAnyLoose(Squad crew1, Squad crew2) {
-        return (!crew1.hasAliveWarriors()) || (!crew2.hasAliveWarriors());
+        return (!crew1.hasAliveWarriors()) ^ (!crew2.hasAliveWarriors());
     }
 
     private int getRandomIndexWarriorTeam(Squad crew) {

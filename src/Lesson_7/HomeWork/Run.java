@@ -92,7 +92,7 @@ public class Run {
         else Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
     }
 
-    static void initFight() {
+    static void startBattle() {
         Squad squad1 = new Squad(team1Name, team1);
         Squad squad2 = new Squad(team2Name, team2);
 
@@ -100,24 +100,32 @@ public class Run {
 
         Gui.setLog("Битва началась!!! ", DataHelper.getFormattedStartDate());
 
-        while (true) {
-            greatBattle.striking(squad1, squad2);
-            DataHelper.skipTime();
-            if (greatBattle.isAnyLoose(squad1, squad2)) {
-                greatBattle.winnerIs(squad1, squad2);
-                break;
-            }
+        startFight(greatBattle, squad1, squad2);
 
-            greatBattle.striking(squad2, squad1);
-            DataHelper.skipTime();
-            if (greatBattle.isAnyLoose(squad1, squad2)) {
-                greatBattle.winnerIs(squad1, squad2);
-                break;
-            }
-        }
         Gui.setLog("Бой продолжался: ", DataHelper.getFormattedDiff());
     }
 
+    private static void startFight(Battle greatBattle, Squad squad1, Squad squad2) {
+
+        while (true) {
+            if (strikeTeamToTeam(greatBattle, squad1, squad2)) {
+                return;
+            }
+            if (strikeTeamToTeam(greatBattle, squad2, squad1)) {
+                return;
+            }
+        }
+    }
+
+    private static boolean strikeTeamToTeam(Battle greatBattle, Squad squad1, Squad squad2) {
+        greatBattle.striking(squad1, squad2);
+        DataHelper.skipTime();
+        if (greatBattle.isAnyLoose(squad1, squad2)) {
+            greatBattle.winnerIs(squad1, squad2);
+            return true;
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
 
