@@ -36,7 +36,7 @@ public class Run {
         }
 
         inputStr = Gui.getFieldSecondNameTeam();
-        if (!inputStr.equals("")  &&  !inputStr.equals(team1Name)) {
+        if ((!inputStr.equals("")) && (!inputStr.equals(team1Name))) {
             team2Name = inputStr;
             Gui.setLog("Название второго отряда: ", team2Name);
         }
@@ -58,16 +58,18 @@ public class Run {
         int indexTeam = Gui.getComboBoxTeam();
         int indexTypeWarrior = Gui.getComboBoxTypeWarrior();
 
-        if (indexTeam == 0) {
-            currentTeam = team1;
-            currentTeamName = team1Name;
-        }
-        if (indexTeam == 1){
-            currentTeam = team2;
-            currentTeamName = team2Name;
-        }
-
         if (nameWarrior.equals(""))  nameWarrior = getRandomNameWarrior();
+
+        switch (indexTeam) {
+            case 0:
+                currentTeam = team1;
+                currentTeamName = team1Name;
+                break;
+            case 1:
+                currentTeam = team2;
+                currentTeamName = team2Name;
+                break;
+        }
 
         switch (indexTypeWarrior) {
             case 0:
@@ -84,11 +86,14 @@ public class Run {
                 break;
         }
 
-
-        if (indexTeam == 0) {
-            Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
+        switch (indexTeam) {
+            case 0:
+                Gui.setFieldFirstTeamWarriorList(nameWarrior, currentTypeWarrior);
+                break;
+            case 1:
+                Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
+                break;
         }
-        else Gui.setFieldSecondTeamWarriorList(nameWarrior, currentTypeWarrior);
     }
 
     static void startBattle() {
