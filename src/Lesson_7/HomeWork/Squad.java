@@ -20,6 +20,8 @@ class Squad implements Cloneable {
         return name;
     }
 
+    private List<Warrior> getTeam() { return team; }
+
     Warrior getTeamWarrior(int index) {
         return team.get(index);
     }
@@ -46,8 +48,8 @@ class Squad implements Cloneable {
         obj.name = name;
         obj.team = new ArrayList<>();
 
-        for (int i = 0; i < obj.team.size(); i++) {
-            obj.team.set(i ,team.get(i).clone());
+        for (Warrior warrior: this.getTeam()) {
+            obj.team.add(warrior.clone());
         }
         return obj;
     }
