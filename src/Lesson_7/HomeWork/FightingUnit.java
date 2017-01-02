@@ -5,14 +5,16 @@ package Lesson_7.HomeWork;
  */
 abstract class FightingUnit {
 
-    private int health = 120;
-    private int damage = 50;
+    private int health;
+    private int damage;
     private String squadName;
     private String name;
 
-    FightingUnit(String name, String squadName) {
+    FightingUnit(String name, String squadName, int health, int damage) {
         this.name = name;
         this.squadName = squadName;
+        this.health = health;
+        this.damage = damage;
     }
 
     public int getDamage() {
@@ -23,18 +25,13 @@ abstract class FightingUnit {
         return name;
     }
 
-    public String getType() {
-        return getClass().getSimpleName();
-    }
-
     public int attack() {
         return damage;
     }
 
     public void takeDamage(int damage) {
-        //минимальное здоровье - нуль, но никак не отрицательное!!!!
         if ((damage < health) || (damage == health))  health -= damage;
-        else health -= health;
+        else health = 0;
     }
 
     public boolean isAlive() {
@@ -44,6 +41,4 @@ abstract class FightingUnit {
     public String toString() {
         return "имя: " + name + ", класс: " + getClass().getSimpleName() + ", отряд: " + squadName;
     }
-
-    public abstract Warrior clone();
 }

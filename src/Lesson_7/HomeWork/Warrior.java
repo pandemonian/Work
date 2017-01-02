@@ -13,6 +13,4 @@ interface Warrior extends Cloneable {
     void takeDamage(int damage);
     boolean isAlive();
     String getName();
-    String getType();
-    Warrior clone() throws CloneNotSupportedException;
 }

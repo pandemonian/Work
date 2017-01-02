@@ -41,16 +41,4 @@ class Squad implements Cloneable {
     public String toString() {
         return name;
     }
-
-    @Override
-    protected Squad clone() throws CloneNotSupportedException {
-        Squad obj = (Squad)super.clone();
-        obj.name = name;
-        obj.team = new ArrayList<>();
-
-        for (Warrior warrior: this.getTeam()) {
-            obj.team.add(warrior.clone());
-        }
-        return obj;
-    }
 }

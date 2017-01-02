@@ -14,7 +14,7 @@ class Battle {
         int indexWarriorTeam2;
 
         //если у обеих отрядов есть живые, то выбираем их рандомно
-        if (crew1.hasAliveWarriors() && crew2.hasAliveWarriors()) {
+        if ((crew1.hasAliveWarriors()) && (crew2.hasAliveWarriors())) {
 
             indexWarriorTeam1 = getRandomIndexWarriorTeam(crew1);
             indexWarriorTeam2 = getRandomIndexWarriorTeam(crew2);
