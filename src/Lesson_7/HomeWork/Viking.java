@@ -3,7 +3,7 @@ package Lesson_7.HomeWork;
 /**
  * Created by Gubanov Pavel on 20.11.16.
  */
-class Viking extends FightingUnit implements Warrior {
+class Viking extends AbstractWarrior implements Warrior {
 
     private static final int VIKING_HEALTH = 120;
     private static final int VIKING_DAMAGE = 50;

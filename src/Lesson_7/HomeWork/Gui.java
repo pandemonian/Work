@@ -91,18 +91,18 @@ class Gui extends JFrame {
 
 
         buttonSetTeamNames.addActionListener(e -> {
-            Run.initNameTeams();
+            Singleton.INSTANCE.getInit().initNameTeams();
             buttonSetTeamNames.setEnabled(false);
             buttonAddWarrior.setEnabled(true);
         });
 
         buttonAddWarrior.addActionListener(e -> {
-            Run.initNameAndTypeWarriors();
-            if (Run.isTeamsNotEmpty()) buttonStartFight.setEnabled(true);
+            Singleton.INSTANCE.getInit().initNameAndTypeWarriors();
+            if (Singleton.INSTANCE.getInit().isTeamsNotEmpty()) buttonStartFight.setEnabled(true);
         });
 
         buttonStartFight.addActionListener(e -> {
-            Run.startBattle();
+            new Battle().startBattle();
             buttonAddWarrior.setEnabled(false);
             buttonStartFight.setEnabled(false);
 

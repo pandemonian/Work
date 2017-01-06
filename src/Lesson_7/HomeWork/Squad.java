@@ -1,12 +1,11 @@
 package Lesson_7.HomeWork;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Gubanov Pavel on 20.11.16.
  */
-class Squad implements Cloneable {
+class Squad {
 
     private String name;
     private List<Warrior> team;
@@ -19,8 +18,6 @@ class Squad implements Cloneable {
     String getName() {
         return name;
     }
-
-    private List<Warrior> getTeam() { return team; }
 
     Warrior getTeamWarrior(int index) {
         return team.get(index);

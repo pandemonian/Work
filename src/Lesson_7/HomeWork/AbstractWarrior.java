@@ -3,14 +3,14 @@ package Lesson_7.HomeWork;
 /**
  * Created by Gubanov Pavel on 02.01.17.
  */
-abstract class FightingUnit {
+abstract class AbstractWarrior {
 
     private int health;
     private int damage;
     private String squadName;
     private String name;
 
-    FightingUnit(String name, String squadName, int health, int damage) {
+    AbstractWarrior(String name, String squadName, int health, int damage) {
         this.name = name;
         this.squadName = squadName;
         this.health = health;
