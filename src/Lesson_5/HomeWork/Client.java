@@ -6,13 +6,13 @@ import java.util.ArrayList;
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public class Client implements Serializable{
+class Client implements Serializable{
 
     private String nameFirstLast;
     private String passportId;
     private ArrayList<Card> clientCards;
 
-    public Client(String nameFirstLast, String passportId) {
+    Client(String nameFirstLast, String passportId) {
         clientCards = new ArrayList<>();
         this.nameFirstLast = nameFirstLast;
         this.passportId = passportId;

@@ -1,6 +1,9 @@
 package Lesson_5.HomeWork;
 
-import Lesson_5.HomeWork.Exceptions.*;
+import Lesson_8.HomeWork.Exceptions.BlockException;
+import Lesson_8.HomeWork.Exceptions.CardException;
+import Lesson_8.HomeWork.Exceptions.ClientException;
+import Lesson_8.HomeWork.Exceptions.MoneyException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -413,7 +416,6 @@ class CashMachine extends Thread implements Terminal, Serializable {
 
     void inputPin() {
         String Pin;
-        System.out.println("Введите PIN-код:");
 
         while (true) {
 
@@ -463,7 +465,6 @@ class CashMachine extends Thread implements Terminal, Serializable {
                     if (clientCard.getNumber().equals(cardNumber)) {
                         return clientCard;
                     }
-
                 }
             }
         }

@@ -1,6 +1,10 @@
 package Lesson_5.HomeWork;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
@@ -30,6 +34,37 @@ public class Run {
         }
     }
 
+    private static void showMenu() {
+
+        System.out.println("");
+        System.out.println("Выберите операцию:");
+        System.out.println("1 - Проверить состояние счёта");
+        System.out.println("2 - Снять наличные");
+        System.out.println("3 - Внести наличные");
+        System.out.println("4 - Завести нового клиента");
+        System.out.println("5 - Удалить существующего клиента");
+        System.out.println("6 - Создать карту для клиента");
+        System.out.println("7 - Удалить карту");
+        System.out.println("8 - Информация о текущем клиенте и его карте");
+        System.out.println("9 - Выйти");
+        System.out.println("");
+    }
+
+    private static void showHelloInfo() {
+        System.out.println("Добро пожаловать, Вас приветствует ПАО \"Объебанк\"");
+        System.out.println("Объединённый Единый Банк");
+        System.out.println("");
+        System.out.println("Введите PIN-код:");
+    }
+
+    private static void showInputCardInfo() {
+        System.out.println("Вставьте пожалуйста карту(укажите её номер):");
+        System.out.println("Нажмите\"Enter\" для использования карты по-умолчанию при первоначальной" +
+                " загрузке банкомата");
+        System.out.println("Либо нажмите\"exit\" для выхода");
+        System.out.println("");
+    }
+
     public static void main(String[] args) throws Exception {
 
         Client client1 = new Client("Ivan Ivanov", "1234 456789");
@@ -40,41 +75,22 @@ public class Run {
         bankomat.workWith(client1);
         bankomat.feedCard(clientCard1);
 
-        System.out.println("Добро пожаловать, Вас приветствует ПАО \"Объебанк\"");
-        System.out.println("Объединённый Единый Банк");
-        System.out.println("");
+        showHelloInfo();
         bankomat.inputPin();
 
 
         while (true) {
 
-            System.out.println("Вставьте пожалуйста карту(укажите её номер):");
-            System.out.println("Нажмите\"Enter\" для использования карты по-умолчанию при первоначальной" +
-                    " загрузке банкомата");
-            System.out.println("Либо нажмите\"exit\" для выхода");
-            System.out.println("");
-
+            showInputCardInfo();
             inputStr = getInputStr();
 
             if (inputStr.equals("exit"))  break;
             if (inputStr.length() == 16)  bankomat.feedCard(bankomat.chooseCard(inputStr));
 
             while (true) {
-                System.out.println("");
-                System.out.println("Выберите операцию:");
-                System.out.println("1 - Проверить состояние счёта");
-                System.out.println("2 - Снять наличные");
-                System.out.println("3 - Внести наличные");
-                System.out.println("4 - Завести нового клиента");
-                System.out.println("5 - Удалить существующего клиента");
-                System.out.println("6 - Создать карту для клиента");
-                System.out.println("7 - Удалить карту");
-                System.out.println("8 - Информация о текущем клиенте и его карте");
-                System.out.println("9 - Выйти");
-                System.out.println("");
 
+                showMenu();
                 inputStr = getInputStr();
-
                 System.out.println("");
 
                 if (inputStr.equals("1")) bankomat.getMoneyBalance();

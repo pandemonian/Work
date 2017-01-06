@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Gubanov Pavel on 28.11.16.
  */
-public class Card implements Serializable {
+class Card implements Serializable {
     private int moneyBalance;
     private String number;
     private String holder;
@@ -28,7 +28,7 @@ public class Card implements Serializable {
         this.moneyBalance = moneyBalance;
     }
 
-    public String getNumber() {
+    String getNumber() {
         return number;
     }
 

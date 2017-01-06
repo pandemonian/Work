@@ -32,7 +32,6 @@ class Archer implements Warrior {
 
     @Override
     public void takeDamage(int damage) {
-        //минимальное здоровье - нуль, но никак не отрицательное!!!!
         if ((damage < health) || (damage == health))  health -= damage;
         else health -= health;
     }
