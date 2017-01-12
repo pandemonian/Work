@@ -65,6 +65,10 @@ public class Run {
         System.out.println("");
     }
 
+    private static void startTask1Lesson8(Card card) {
+        new Increaser(card).start();
+    }
+
     public static void main(String[] args) throws Exception {
 
         Client client1 = new Client("Ivan Ivanov", "1234 456789");
