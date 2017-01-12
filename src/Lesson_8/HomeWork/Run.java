@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
+import java.util.stream.IntStream;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
@@ -12,6 +13,7 @@ import java.io.FileOutputStream;
 public class Run {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static String inputStr;
+    private static boolean isExit;
 
     static String getInputStr() {
         try {
@@ -46,27 +48,30 @@ public class Run {
         System.out.println("6 - Создать карту для клиента");
         System.out.println("7 - Удалить карту");
         System.out.println("8 - Информация о текущем клиенте и его карте");
-        System.out.println("9 - Выйти");
-        System.out.println("");
+        System.out.println("9 - Запустить инкремент-декримент потоки 1-ый task 8-го задания");
+        System.out.println("10 - Выйти\n");
     }
 
     private static void showHelloInfo() {
         System.out.println("Добро пожаловать, Вас приветствует ПАО \"Объебанк\"");
-        System.out.println("Объединённый Единый Банк");
-        System.out.println("");
-        System.out.println("Введите PIN-код:");
+        System.out.println("Объединённый Единый Банк\n");
     }
 
     private static void showInputCardInfo() {
         System.out.println("Вставьте пожалуйста карту(укажите её номер):");
         System.out.println("Нажмите\"Enter\" для использования карты по-умолчанию при первоначальной" +
                 " загрузке банкомата");
-        System.out.println("Либо нажмите\"exit\" для выхода");
-        System.out.println("");
+        System.out.println("Либо нажмите\"exit\" для выхода\n");
     }
 
     private static void startTask1Lesson8(Card card) {
-        new Increaser(card).start();
+
+        IntStream.range(0, 200)
+                .forEach((t) -> {
+                    new Increaser(card).start();
+                    new Increaser(card).start();
+                });
+
     }
 
     public static void main(String[] args) throws Exception {
@@ -91,21 +96,56 @@ public class Run {
             if (inputStr.equals("exit"))  break;
             if (inputStr.length() == 16)  bankomat.feedCard(bankomat.chooseCard(inputStr));
 
-            while (true) {
+            while (!isExit) {
 
                 showMenu();
                 inputStr = getInputStr();
                 System.out.println("");
 
-                if (inputStr.equals("1")) bankomat.getMoneyBalance();
-                if (inputStr.equals("2")) bankomat.getCash();
-                if (inputStr.equals("3")) bankomat.putCash();
-                if (inputStr.equals("4")) bankomat.createClient();
-                if (inputStr.equals("5")) bankomat.deleteClient();
-                if (inputStr.equals("6")) bankomat.createCard();
-                if (inputStr.equals("7")) bankomat.deleteCard();
-                if (inputStr.equals("8")) bankomat.helpInfo();
-                if (inputStr.equals("9")) break;
+                switch (inputStr) {
+                    case "1":
+                        bankomat.getMoneyBalance();
+                        break;
+
+                    case "2":
+                        bankomat.getCash();
+                        break;
+
+                    case "3":
+                        bankomat.putCash();
+                        break;
+
+                    case "4":
+                        bankomat.createClient();
+                        break;
+
+                    case "5":
+                        bankomat.deleteClient();
+                        break;
+
+                    case "6":
+                        bankomat.createCard();
+                        break;
+
+                    case "7":
+                        bankomat.deleteCard();
+                        break;
+
+                    case "8":
+                        bankomat.helpInfo();
+                        break;
+
+                    case "9":
+                        startTask1Lesson8(clientCard1);
+                        break;
+
+                    case "10":
+                        isExit = true;
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
