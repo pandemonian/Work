@@ -66,11 +66,20 @@ public class Run {
 
     private static void startTask1Lesson8(Card card) {
 
-        IntStream.range(0, 200)
+
+        IntStream.range(0, 10)
                 .forEach((t) -> {
-                    new Increaser(card).start();
-                    new Increaser(card).start();
+                    Increaser increaser = new Increaser(card);
+                    increaser.start();
+
+                    Decreaser decreaser = new Decreaser(card);
+                    decreaser.start();
+
                 });
+
+    }
+
+    private static void startTask2Lesson8(Card card) {
 
     }
 

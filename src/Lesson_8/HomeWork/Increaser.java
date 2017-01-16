@@ -4,9 +4,9 @@ import java.util.Random;
 /**
  * Created by Gubanov Pavel on 25.12.16.
  */
-public class Increaser extends Thread {
+class Increaser extends Thread {
     private int incCount = new Random().nextInt(11);
-    private Card card;
+    private final Card card;
 
     Increaser(Card card) {
         this.card = card;
@@ -31,7 +31,7 @@ public class Increaser extends Thread {
     }
 
     @Override
-    public synchronized void start() {
+    public void run() {
         go();
     }
 }
