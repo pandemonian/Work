@@ -67,7 +67,7 @@ public class Run {
     private static void startTask1Lesson8(Card card) {
 
 
-        IntStream.range(0, 10)
+        IntStream.range(0, 100)
                 .forEach((t) -> {
                     Increaser increaser = new Increaser(card);
                     increaser.start();
@@ -75,8 +75,14 @@ public class Run {
                     Decreaser decreaser = new Decreaser(card);
                     decreaser.start();
 
+                        try {
+                            increaser.join();
+                            decreaser.join();
+                        } catch (InterruptedException e) {
+                            e.getMessage();
+                            e.printStackTrace();
+                        }
                 });
-
     }
 
     private static void startTask2Lesson8(Card card) {

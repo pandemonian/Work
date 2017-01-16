@@ -44,12 +44,6 @@ class Decreaser extends Thread {
         } else {
             showErrorGetMoneyLog();
         }
-
-        try {
-            join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
