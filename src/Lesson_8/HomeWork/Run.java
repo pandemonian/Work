@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
-import java.util.stream.IntStream;
 
 /**
  * Created by Gubanov Pavel on 28.11.16.
@@ -48,8 +47,11 @@ public class Run {
         System.out.println("6 - Создать карту для клиента");
         System.out.println("7 - Удалить карту");
         System.out.println("8 - Информация о текущем клиенте и его карте");
-        System.out.println("9 - Запустить инкремент-декримент потоки 1-ый task 8-го задания");
-        System.out.println("10 - Выйти\n");
+        System.out.println("9 - Запустить инкремент-декримент потоки. Задача № 1 (safe)");
+        System.out.println("10 - Запустить инкремент-декримент потоки. Задача № 1 (unsafe)");
+        System.out.println("11 - Запустить инкремент-декримент потоки. Задача № 2 (safe via ReentrantLock)");
+        System.out.println("12 - Запустить инкремент-декримент потоки. Задача № 3 (safe via Decorator)");
+        System.out.println("13 - Выйти\n");
     }
 
     private static void showHelloInfo() {
@@ -64,29 +66,46 @@ public class Run {
         System.out.println("Либо нажмите\"exit\" для выхода\n");
     }
 
-    private static void startTask1Lesson8(Card card) {
+    private static void startTask1Lesson8Safe(Card card) {
+        for (int i = 0; i < 100; i++) {
+            Increaser increaser = new Increaser(card);
+            increaser.start();
 
+            Decreaser decreaser = new Decreaser(card);
+            decreaser.start();
 
-        IntStream.range(0, 100)
-                .forEach((t) -> {
-                    Increaser increaser = new Increaser(card);
-                    increaser.start();
+            try {
+                increaser.join();
+                decreaser.join();
+            } catch (InterruptedException e) {
+                e.getMessage();
+                e.printStackTrace();
+            }
+        }
+    }
 
-                    Decreaser decreaser = new Decreaser(card);
-                    decreaser.start();
+    private static void startTask1Lesson8Unsafe(Card card) {
+        for (int i = 0; i < 100; i++) {
+            IncreaserUnsafe increaser = new IncreaserUnsafe(card);
+            increaser.start();
 
-                        try {
-                            increaser.join();
-                            decreaser.join();
-                        } catch (InterruptedException e) {
-                            e.getMessage();
-                            e.printStackTrace();
-                        }
-                });
+            DecreaserUnsafe decreaser = new DecreaserUnsafe(card);
+            decreaser.start();
+
+            try {
+                increaser.join();
+                decreaser.join();
+            } catch (InterruptedException e) {
+                e.getMessage();
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void startTask2Lesson8(Card card) {
+    }
 
+    private static void startTask3Lesson8(Card card) {
     }
 
     public static void main(String[] args) throws Exception {
@@ -151,10 +170,22 @@ public class Run {
                         break;
 
                     case "9":
-                        startTask1Lesson8(clientCard1);
+                        startTask1Lesson8Safe(clientCard1);
                         break;
 
                     case "10":
+                        startTask1Lesson8Unsafe(clientCard1);
+                        break;
+
+                    case "11":
+                        startTask2Lesson8(clientCard1);
+                        break;
+
+                    case "12":
+                        startTask3Lesson8(clientCard1);
+                        break;
+
+                    case "13":
                         isExit = true;
                         break;
 
