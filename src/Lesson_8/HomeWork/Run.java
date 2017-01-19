@@ -103,6 +103,10 @@ public class Run {
     }
 
     private static void startTask2Lesson8(Card card) {
+        Synchro synchro = new Synchro();
+
+        new Thread(new SequentialIncreaser(synchro, card)).start();
+        //new Thread(new SequentialDecreaser(lock, condition)).start();
     }
 
     private static void startTask3Lesson8(Card card) {
