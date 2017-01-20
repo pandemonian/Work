@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Synchro {
     private final ReentrantLock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
-    private boolean isIncrementThreadCurrent;
+    private volatile boolean isIncrementThreadCurrent;
 
     ReentrantLock getLock() {
         return lock;

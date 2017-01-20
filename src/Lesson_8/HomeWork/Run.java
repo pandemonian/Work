@@ -47,8 +47,8 @@ public class Run {
         System.out.println("6 - Создать карту для клиента");
         System.out.println("7 - Удалить карту");
         System.out.println("8 - Информация о текущем клиенте и его карте");
-        System.out.println("9 - Запустить инкремент-декримент потоки. Задача № 1 (safe)");
-        System.out.println("10 - Запустить инкремент-декримент потоки. Задача № 1 (unsafe)");
+        System.out.println("9 - Запустить инкремент-декримент потоки. Задача № 1 (unsafe)");
+        System.out.println("10 - Запустить инкремент-декримент потоки. Задача № 1 (safe)");
         System.out.println("11 - Запустить инкремент-декримент потоки. Задача № 2 (safe via ReentrantLock)");
         System.out.println("12 - Запустить инкремент-декримент потоки. Задача № 3 (safe via Decorator)");
         System.out.println("13 - Выйти\n");
@@ -105,8 +105,22 @@ public class Run {
     private static void startTask2Lesson8(Card card) {
         Synchro synchro = new Synchro();
 
-        new Thread(new SequentialIncreaser(synchro, card)).start();
-        //new Thread(new SequentialDecreaser(lock, condition)).start();
+        SequentialIncreaser increaser = new SequentialIncreaser(synchro, card);
+        Thread increaseThread = new Thread(increaser);
+
+        SequentialDecreaser decreaser = new SequentialDecreaser(synchro, card);
+        Thread decreaseThread = new Thread(decreaser);
+
+        increaseThread.start();
+        decreaseThread.start();
+
+        try {
+            increaseThread.join();
+            decreaseThread.join();
+        } catch (InterruptedException e) {
+            e.getMessage();
+            e.printStackTrace();
+        }
     }
 
     private static void startTask3Lesson8(Card card) {
@@ -174,11 +188,11 @@ public class Run {
                         break;
 
                     case "9":
-                        startTask1Lesson8Safe(clientCard1);
+                        startTask1Lesson8Unsafe(clientCard1);
                         break;
 
                     case "10":
-                        startTask1Lesson8Unsafe(clientCard1);
+                        startTask1Lesson8Safe(clientCard1);
                         break;
 
                     case "11":
