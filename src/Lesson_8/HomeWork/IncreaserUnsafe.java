@@ -31,5 +31,11 @@ class IncreaserUnsafe extends Thread {
     public void run() {
         go();
 
+        try {
+            this.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -124,7 +124,25 @@ public class Run {
     }
 
     private static void startTask3Lesson8(Card card) {
-    }
+        Object lock = new Object();
+
+
+        //DeacreaserInterface dec1 = new DecreaserUnsafe(card);
+        DecreaserUnsafe dec1 = new DecreaserUnsafe(card);
+
+        new Thread(dec1).start();
+
+        SafeDeacreaserDecorator dec2 = new SafeDeacreaserDecorator(dec1, lock);
+        new Thread(dec2).start();
+
+
+
+
+
+
+
+        }
+
 
     public static void main(String[] args) throws Exception {
 

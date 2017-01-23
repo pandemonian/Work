@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by Gubanov Pavel on 19.01.17.
  */
-class DecreaserUnsafe extends Thread{
+class DecreaserUnsafe extends Thread implements DeacreaserInterface {
     private int decCount = new Random().nextInt(11);
     private final Card card;
 
@@ -13,7 +13,11 @@ class DecreaserUnsafe extends Thread{
         this.card = card;
     }
 
-    private boolean getMoney() {
+    public Card getCard() {
+        return card;
+    }
+
+    public boolean getMoney() {
         if (card.getMoneyBalance() >= decCount) {
             card.setMoneyBalance(card.getMoneyBalance() - decCount);
             return true;
@@ -22,19 +26,18 @@ class DecreaserUnsafe extends Thread{
         }
     }
 
-    private void showGetMoneyLog() {
+    public void showGetMoneyLog() {
         System.out.println("Уменьшаем баланс счёта на \"" + decCount +
                     "\". Текущий баланс составляет: " + card.getMoneyBalance());
     }
 
-    private void showErrorGetMoneyLog() {
-        synchronized (card) {
+    public void showErrorGetMoneyLog() {
             System.out.println("Сумма для снятия равная \"" + decCount +
                     "\" больше текущего баланса -> итерация пропускается");
-        }
     }
 
-    private void go() {
+    @Override
+    public void go() {
         if (getMoney()) {
             showGetMoneyLog();
         } else {
@@ -44,6 +47,8 @@ class DecreaserUnsafe extends Thread{
 
     @Override
     public void run() {
-        go();
+        //go();
+
+        System.out.println("unsafe");
     }
 }
