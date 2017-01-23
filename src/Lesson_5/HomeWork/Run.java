@@ -46,23 +46,19 @@ public class Run {
         System.out.println("6 - Создать карту для клиента");
         System.out.println("7 - Удалить карту");
         System.out.println("8 - Информация о текущем клиенте и его карте");
-        System.out.println("9 - Выйти");
-        System.out.println("");
+        System.out.println("9 - Выйти\n");
     }
 
     private static void showHelloInfo() {
         System.out.println("Добро пожаловать, Вас приветствует ПАО \"Объебанк\"");
-        System.out.println("Объединённый Единый Банк");
-        System.out.println("");
-        System.out.println("Введите PIN-код:");
+        System.out.println("Объединённый Единый Банк\n");
     }
 
     private static void showInputCardInfo() {
         System.out.println("Вставьте пожалуйста карту(укажите её номер):");
         System.out.println("Нажмите\"Enter\" для использования карты по-умолчанию при первоначальной" +
                 " загрузке банкомата");
-        System.out.println("Либо нажмите\"exit\" для выхода");
-        System.out.println("");
+        System.out.println("Либо нажмите\"exit\" для выхода\n");
     }
 
     public static void main(String[] args) throws Exception {

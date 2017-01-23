@@ -417,9 +417,13 @@ class CashMachine extends Thread implements Terminal, Serializable {
     void inputPin() {
         String Pin;
 
+        System.out.println("Введите PIN-код");
+
         while (true) {
 
-            if (getWrongCountEnteredPin() != 0)System.out.println("Введите PIN-код");
+            if (getWrongCountEnteredPin() != 0) {
+                System.out.println("Введите PIN-код");
+            }
 
             Pin = Run.getInputStr();
 
