@@ -2,11 +2,13 @@ package Lesson_8.HomeWork;
 
 import java.util.Random;
 
-/**
- * Created by Gubanov Pavel on 19.01.17.
+/*
+ * Потоконебезопасная версия используемая в дальнейшем для демонстрации работы декоратора
+ * и других примеров.
  */
-class DecreaserUnsafe extends Thread implements DeacreaserInterface {
-    private int decCount = new Random().nextInt(11);
+
+class DecreaserUnsafe extends Thread implements DecoratorInterface {
+    private int decCount;
     private final Card card;
 
     DecreaserUnsafe(Card card) {
@@ -17,7 +19,8 @@ class DecreaserUnsafe extends Thread implements DeacreaserInterface {
         return card;
     }
 
-    public boolean getMoney() {
+    private boolean getMoney() {
+        decCount = new Random().nextInt(11);
         if (card.getMoneyBalance() >= decCount) {
             card.setMoneyBalance(card.getMoneyBalance() - decCount);
             return true;
@@ -26,12 +29,12 @@ class DecreaserUnsafe extends Thread implements DeacreaserInterface {
         }
     }
 
-    public void showGetMoneyLog() {
+    private void showGetMoneyLog() {
         System.out.println("Уменьшаем баланс счёта на \"" + decCount +
                     "\". Текущий баланс составляет: " + card.getMoneyBalance());
     }
 
-    public void showErrorGetMoneyLog() {
+    private void showErrorGetMoneyLog() {
             System.out.println("Сумма для снятия равная \"" + decCount +
                     "\" больше текущего баланса -> итерация пропускается");
     }
@@ -47,8 +50,8 @@ class DecreaserUnsafe extends Thread implements DeacreaserInterface {
 
     @Override
     public void run() {
-        //go();
-
-        System.out.println("unsafe");
+        for (int i = 0; i < 100; i++) {
+            go();
+        }
     }
 }

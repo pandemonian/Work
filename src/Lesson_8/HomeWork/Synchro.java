@@ -3,10 +3,11 @@ package Lesson_8.HomeWork;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Created by Gubanov Pavel on 19.01.17.
+/*
+ * Класс используемый для синхронизации средства пакета "java.util.concurrent.locks"
  */
-public class Synchro {
+
+class Synchro {
     private final ReentrantLock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();
     private volatile boolean isIncrementThreadCurrent;

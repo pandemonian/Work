@@ -2,11 +2,13 @@ package Lesson_8.HomeWork;
 
 import java.util.Random;
 
-/**
- * Created by Gubanov Pavel on 19.01.17.
+/*
+ * Потоконебезопасная версия используемая в дальнейшем для демонстрации работы декоратора
+ * и других примеров.
  */
-class IncreaserUnsafe extends Thread {
-    private int incCount = new Random().nextInt(11);
+
+class IncreaserUnsafe extends Thread implements DecoratorInterface {
+    private int incCount;
     private final Card card;
 
     IncreaserUnsafe(Card card) {
@@ -14,7 +16,8 @@ class IncreaserUnsafe extends Thread {
     }
 
     private void putMoney() {
-            card.setMoneyBalance(card.getMoneyBalance() + incCount);
+        incCount = new Random().nextInt(11);
+        card.setMoneyBalance(card.getMoneyBalance() + incCount);
     }
 
     private void showPutMoneyLog() {
@@ -22,20 +25,15 @@ class IncreaserUnsafe extends Thread {
                     "\". Текущий баланс составляет: " + card.getMoneyBalance());
     }
 
-    private void go() {
+    public void go() {
         putMoney();
         showPutMoneyLog();
     }
 
     @Override
     public void run() {
-        go();
-
-        try {
-            this.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (int i = 0; i < 100; i++) {
+            go();
         }
-
     }
 }

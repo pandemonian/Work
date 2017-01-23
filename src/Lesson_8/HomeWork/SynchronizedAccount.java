@@ -1,7 +1,28 @@
 package Lesson_8.HomeWork;
 
-/**
- * Created by Gubanov Pavel on 07.01.17.
+/*
+ *  Общий для классов инкремента и декримента - декоратор
  */
-public class SynchronizedAccount {
+class SynchronizedAccount implements DecoratorInterface, Runnable{
+    private DecoratorInterface component;
+    private final Object lock;
+
+    SynchronizedAccount(DecoratorInterface component, Object lock) {
+        this.component = component;
+        this.lock = lock;
+    }
+
+    @Override
+    public void go() {
+        synchronized (lock) {
+            component.go();
+        }
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) {
+            go();
+        }
+    }
 }

@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
 
-/**
- * Created by Gubanov Pavel on 28.11.16.
- */
 public class Run {
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static String inputStr;
@@ -66,40 +63,53 @@ public class Run {
         System.out.println("Либо нажмите\"exit\" для выхода\n");
     }
 
-    private static void startTask1Lesson8Safe(Card card) {
-        for (int i = 0; i < 100; i++) {
-            Increaser increaser = new Increaser(card);
-            increaser.start();
+    private static void startTask1Lesson8Unsafe(Card card) {
 
-            Decreaser decreaser = new Decreaser(card);
-            decreaser.start();
+        IncreaserUnsafe increaser = new IncreaserUnsafe(card);
+        DecreaserUnsafe decreaser = new DecreaserUnsafe(card);
 
-            try {
-                increaser.join();
-                decreaser.join();
-            } catch (InterruptedException e) {
-                e.getMessage();
-                e.printStackTrace();
+        increaser.setPriority(Thread.MAX_PRIORITY);
+
+        increaser.start();
+        decreaser.start();
+
+        increaser.interrupt();
+
+        //раскомментировать для проверки прерывания
+
+        /*while (true) {
+            if (increaser.isAlive()) {
+                System.out.println(increaser.getName() + " - " + increaser.getState());
+            } else {
+                System.out.println(increaser.getName() + " - " + increaser.getState());
+                break;
             }
+        }*/
+
+        try {
+            increaser.join();
+            decreaser.join();
+        } catch (InterruptedException e) {
+            e.getMessage();
+            e.printStackTrace();
+
         }
     }
 
-    private static void startTask1Lesson8Unsafe(Card card) {
-        for (int i = 0; i < 100; i++) {
-            IncreaserUnsafe increaser = new IncreaserUnsafe(card);
-            increaser.start();
+    private static void startTask1Lesson8Safe(Card card) {
+            IncreaserSafe increaserSafe = new IncreaserSafe(card);
+            increaserSafe.start();
 
-            DecreaserUnsafe decreaser = new DecreaserUnsafe(card);
-            decreaser.start();
+            DecreaserSafe decreaserSafe = new DecreaserSafe(card);
+            decreaserSafe.start();
 
             try {
-                increaser.join();
-                decreaser.join();
+                increaserSafe.join();
+                decreaserSafe.join();
             } catch (InterruptedException e) {
                 e.getMessage();
                 e.printStackTrace();
             }
-        }
     }
 
     private static void startTask2Lesson8(Card card) {
@@ -110,6 +120,8 @@ public class Run {
 
         SequentialDecreaser decreaser = new SequentialDecreaser(synchro, card);
         Thread decreaseThread = new Thread(decreaser);
+
+        increaseThread.setPriority(Thread.MAX_PRIORITY);
 
         increaseThread.start();
         decreaseThread.start();
@@ -126,22 +138,26 @@ public class Run {
     private static void startTask3Lesson8(Card card) {
         Object lock = new Object();
 
+        DecoratorInterface increaserUnsafe = new IncreaserUnsafe(card);
+        SynchronizedAccount increaserDecorator = new SynchronizedAccount(increaserUnsafe, lock);
 
-        //DeacreaserInterface dec1 = new DecreaserUnsafe(card);
-        DecreaserUnsafe dec1 = new DecreaserUnsafe(card);
+        DecoratorInterface decreaserUnsafe = new DecreaserUnsafe(card);
+        SynchronizedAccount decreaserDecorator = new SynchronizedAccount(decreaserUnsafe, lock);
 
-        new Thread(dec1).start();
+        Thread increaseThread = new Thread(increaserDecorator);
+        Thread decreaseThread = new Thread(decreaserDecorator);
 
-        SafeDeacreaserDecorator dec2 = new SafeDeacreaserDecorator(dec1, lock);
-        new Thread(dec2).start();
+        increaseThread.start();
+        decreaseThread.start();
 
-
-
-
-
-
-
+        try {
+            increaseThread.join();
+            decreaseThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            e.getMessage();
         }
+    }
 
 
     public static void main(String[] args) throws Exception {

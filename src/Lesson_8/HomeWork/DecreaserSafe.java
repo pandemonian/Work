@@ -2,19 +2,17 @@ package Lesson_8.HomeWork;
 
 import java.util.Random;
 
-/**
- * Created by Gubanov Pavel on 25.12.16.
- */
-class Decreaser extends Thread {
-    private int decCount = new Random().nextInt(11);
+class DecreaserSafe extends Thread {
+    private int decCount;
     private final Card card;
 
-    Decreaser(Card card) {
+    DecreaserSafe(Card card) {
         this.card = card;
     }
 
     private boolean getMoney() {
         synchronized (card) {
+            decCount = new Random().nextInt(11);
             if (card.getMoneyBalance() >= decCount) {
                 card.setMoneyBalance(card.getMoneyBalance() - decCount);
                 return true;
@@ -48,6 +46,8 @@ class Decreaser extends Thread {
 
     @Override
     public void run() {
+        for (int i = 0; i < 100; i++) {
             go();
+        }
     }
 }

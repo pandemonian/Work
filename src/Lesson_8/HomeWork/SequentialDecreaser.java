@@ -4,9 +4,11 @@ import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Created by Gubanov Pavel on 25.12.16.
+/*
+ * Класс используемый для последовательного вывода списания баланса
+ * несмотря на приоритет нити инкремента.
  */
+
 class SequentialDecreaser implements Runnable {
     private Synchro synchro;
     private int decCount;

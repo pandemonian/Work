@@ -4,6 +4,10 @@ import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/*
+ * Класс используемый для последовательного вывода пополнения баланса
+ * несмотря на приоритет нити инкремента.
+ */
 
 class SequentialIncreaser implements Runnable {
     private Synchro synchro;

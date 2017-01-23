@@ -1,19 +1,18 @@
 package Lesson_8.HomeWork;
 
 import java.util.Random;
-/**
- * Created by Gubanov Pavel on 25.12.16.
- */
-class Increaser extends Thread {
-    private int incCount = new Random().nextInt(11);
+
+class IncreaserSafe extends Thread {
+    private int incCount;
     private final Card card;
 
-    Increaser(Card card) {
+    IncreaserSafe(Card card) {
         this.card = card;
     }
 
     private void putMoney() {
         synchronized (card) {
+            incCount = new Random().nextInt(11);
             card.setMoneyBalance(card.getMoneyBalance() + incCount);
         }
     }
@@ -32,7 +31,8 @@ class Increaser extends Thread {
 
     @Override
     public void run() {
+        for (int i = 0; i < 100; i++) {
             go();
-
+        }
     }
 }
